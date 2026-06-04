@@ -62,12 +62,16 @@
   margin-right: auto;
 }
 
-.site-header__brand-mark {
-  color: var(--color-accent-deep);
-  font-size: 24px;
+.site-header__logo {
+  height: 68px;
+  width: auto;
+  display: block;
 }
 
 .site-header__brand-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
   letter-spacing: -0.01em;
 }
 

@@ -22,7 +22,7 @@ export default function Header() {
     <header className={clsx("site-header", isHome && "site-header--over-hero")}>
       <Container className="site-header__inner">
         <Link to="/" className="site-header__brand" aria-label={`${business.name} home`}>
-          <span className="site-header__brand-mark" aria-hidden="true">☀</span>
+          <img src="/images/Solimar.png" alt="" className="site-header__logo" />
           <span className="site-header__brand-name">{business.name}</span>
         </Link>
 

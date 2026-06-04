@@ -11,10 +11,8 @@ export default function Footer() {
         <div className="site-footer__grid">
           <div>
             <p className="site-footer__brand">
-              <span className="site-footer__mark" aria-hidden="true">☀</span>
-              {business.name}
+              <img src="/images/Solimar.png" alt={business.name} className="site-footer__logo" />
             </p>
-            <p className="site-footer__tag">{business.tagline}</p>
           </div>
 
           <div>
