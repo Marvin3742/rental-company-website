@@ -9,7 +9,7 @@
   justify-content: center;
   gap: var(--space-3);
   background: var(--color-accent);
-  color: var(--color-text);
+  color: #fff;
   border-radius: var(--radius-pill);
   padding: 14px var(--space-5);
   font-weight: 600;
