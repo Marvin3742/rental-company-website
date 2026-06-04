@@ -42,7 +42,7 @@ export const nav = {
 export const hero = {
   titleLine1:   "Solimar Event",
   titleAccent:  "Rentals",
-  subtitle:     "Family-owned event rentals serving Southwest Florida. Tents, tables, chairs, and inflatables — delivered and set up for you.",
+  subtitle:     "Family-owned event rentals serving the Naples, FL area. Tents, tables, chairs, and inflatables — delivered and set up for you.",
   primaryCta:   "Call to Book",
   secondaryCta: "Bundles",
 };
