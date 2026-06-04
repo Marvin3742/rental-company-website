@@ -1,7 +1,7 @@
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 import BookButton from "../ui/BookButton";
-import { business } from "../../data/business";
+import { business, hero } from "../../data/content";
 import "./Hero.css";
 
 export default function Hero() {
@@ -22,18 +22,15 @@ export default function Hero() {
             {business.serviceAreas.join(" · ")}
           </span>
           <h1 className="hero__title">
-            Rangel Party
+            {hero.titleLine1}
             <br />
-            <span className="hero__accent">Rentals</span>
+            <span className="hero__accent">{hero.titleAccent}</span>
           </h1>
-          <p className="hero__subtitle">
-            Family-owned party rentals serving Southwest Florida. Tents,
-            tables, chairs, and inflatables — delivered and set up for you.
-          </p>
+          <p className="hero__subtitle">{hero.subtitle}</p>
           <div className="hero__actions">
-            <BookButton size="lg" label="Book Your Party" showNumber={false} />
+            <BookButton size="lg" label={hero.primaryCta} showNumber={false} />
             <Button to="/rentals" variant="ghost" size="lg">
-              View Bundles
+              {hero.secondaryCta}
             </Button>
           </div>
         </div>

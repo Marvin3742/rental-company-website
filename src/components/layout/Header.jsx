@@ -2,16 +2,11 @@ import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import Container from "../ui/Container";
-import { business } from "../../data/business";
+import { business, nav } from "../../data/content";
 import { telHref, formatPhone } from "../../lib/format";
 import "./Header.css";
 
-const NAV = [
-  { to: "/", label: "Home", end: true },
-  { to: "/rentals", label: "Rentals" },
-  { to: "/about", label: "About & FAQ" },
-  { to: "/gallery", label: "Gallery" },
-];
+const NAV = nav.links;
 
 export default function Header() {
   const [open, setOpen] = useState(false);

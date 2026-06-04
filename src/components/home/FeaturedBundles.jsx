@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import BundleCard from "../bundles/BundleCard";
-import { bundles } from "../../data/bundles";
+import { bundles, featuredBundlesSection } from "../../data/content";
 import "./FeaturedBundles.css";
 
 export default function FeaturedBundles() {
@@ -10,9 +10,9 @@ export default function FeaturedBundles() {
     <section className="featured-bundles" id="bundles">
       <Container>
         <SectionHeading
-          eyebrow="Start with a bundle"
-          title="Party packages"
-          subtitle="Bundles include delivery and setup."
+          eyebrow={featuredBundlesSection.eyebrow}
+          title={featuredBundlesSection.title}
+          subtitle={featuredBundlesSection.subtitle}
           align="center"
         />
 
@@ -23,7 +23,7 @@ export default function FeaturedBundles() {
         </div>
 
         <p className="featured-bundles__alt">
-          Need just a few items? <Link to="/rentals">Browse individual rentals →</Link>
+          <Link to="/rentals">{featuredBundlesSection.altLinkText}</Link>
         </p>
       </Container>
     </section>

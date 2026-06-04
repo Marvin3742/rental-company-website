@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import Image from "../ui/Image";
-import { gallery } from "../../data/gallery";
+import { gallery, galleryPreviewSection } from "../../data/content";
 import "./GalleryPreview.css";
 
 export default function GalleryPreview() {
@@ -11,9 +11,9 @@ export default function GalleryPreview() {
     <section className="gallery-preview">
       <Container>
         <SectionHeading
-          eyebrow="Real events"
-          title="Recent setups."
-          subtitle="A look at real parties we've helped families host across SWFL."
+          eyebrow={galleryPreviewSection.eyebrow}
+          title={galleryPreviewSection.title}
+          subtitle={galleryPreviewSection.subtitle}
         />
 
         <div className="gallery-preview__grid">
@@ -30,7 +30,7 @@ export default function GalleryPreview() {
         </div>
 
         <p className="gallery-preview__cta">
-          <Link to="/gallery">See the full gallery →</Link>
+          <Link to="/gallery">{galleryPreviewSection.cta}</Link>
         </p>
       </Container>
     </section>

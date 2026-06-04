@@ -1,5 +1,5 @@
 import Container from "../ui/Container";
-import { business } from "../../data/business";
+import { business, footer as footerContent } from "../../data/content";
 import { telHref, formatPhone, mailtoHref } from "../../lib/format";
 import "./Footer.css";
 
@@ -18,7 +18,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="site-footer__heading">Get in touch</h3>
+            <h3 className="site-footer__heading">{footerContent.contactHeading}</h3>
             <ul className="site-footer__list">
               <li>
                 <a href={telHref(business.phone)}>
@@ -39,10 +39,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="site-footer__heading">Serving</h3>
+            <h3 className="site-footer__heading">{footerContent.servingHeading}</h3>
             <ul className="site-footer__list">
               {business.serviceAreas.map((area) => (
-                <li key={area}>{area}, FL</li>
+                <li key={area}>{area}{footerContent.serviceAreaSuffix}</li>
               ))}
             </ul>
             <p className="site-footer__hours">{business.hours}</p>
@@ -52,7 +52,7 @@ export default function Footer() {
         <div className="site-footer__bottom">
           <p>© {year} {business.name}. Family-owned in {business.city}.</p>
           <p>
-            Call us to book a bundle —{" "}
+            {footerContent.bottomCta} —{" "}
             <a href={telHref(business.phone)}>{formatPhone(business.phone)}</a>
           </p>
         </div>

@@ -4,16 +4,15 @@ import SectionHeading from "../components/ui/SectionHeading";
 import BookButton from "../components/ui/BookButton";
 import BundleCard from "../components/bundles/BundleCard";
 import InventoryCard from "../components/inventory/InventoryCard";
-import { bundles } from "../data/bundles";
-import { inventory } from "../data/inventory";
+import { bundles, inventory, rentalsPage as rentalsPageContent } from "../data/content";
 import "./RentalsPage.css";
 
 export default function RentalsPage() {
   return (
     <>
       <SeoHead
-        title="Party Rentals & Bundles | Naples, Bonita Springs, Marco Island"
-        description="Browse our party rental bundles and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included."
+        title={rentalsPageContent.seo.title}
+        description={rentalsPageContent.seo.description}
         path="/rentals"
       />
 
@@ -21,8 +20,8 @@ export default function RentalsPage() {
       <section className="rentals-bundles">
         <Container>
           <SectionHeading
-            eyebrow="Party Bundles"
-            title="Bundles save money and keep things simple."
+            eyebrow={rentalsPageContent.bundlesSection.eyebrow}
+            title={rentalsPageContent.bundlesSection.title}
           />
           <div className="rentals-bundles__grid">
             {bundles.map((b) => (
@@ -36,9 +35,8 @@ export default function RentalsPage() {
       <section className="rentals-items">
         <Container>
           <SectionHeading
-            eyebrow="Individual Rentals"
-            title="Looking for just a few items?"
-
+            eyebrow={rentalsPageContent.itemsSection.eyebrow}
+            title={rentalsPageContent.itemsSection.title}
           />
           <div className="rentals-items__grid">
             {inventory.map((item) => (
@@ -52,7 +50,7 @@ export default function RentalsPage() {
       <section className="rentals-reminder">
         <Container narrow>
           <div className="rentals-reminder__inner">
-            <h2>Bundles include delivery and setup.</h2>
+            <h2>{rentalsPageContent.reminder.heading}</h2>
             <p></p>
             <BookButton size="lg" />
           </div>

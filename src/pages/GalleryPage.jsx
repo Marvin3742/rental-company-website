@@ -3,8 +3,7 @@ import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
 import BookButton from "../components/ui/BookButton";
 import GalleryGrid from "../components/gallery/GalleryGrid";
-import { gallery } from "../data/gallery";
-import { business } from "../data/business";
+import { gallery, galleryPage as galleryPageContent, business } from "../data/content";
 import "./GalleryPage.css";
 
 export default function GalleryPage() {
@@ -12,21 +11,21 @@ export default function GalleryPage() {
     <>
       <SeoHead
         title={`Gallery | ${business.name}`}
-        description="A look at real parties and events we've set up across Naples, Bonita Springs, and Marco Island."
+        description={galleryPageContent.seo.description}
         path="/gallery"
       />
 
       <section className="gallery-page">
         <Container>
           <SectionHeading
-            eyebrow="Past events"
-            title="Gallery"
+            eyebrow={galleryPageContent.eyebrow}
+            title={galleryPageContent.title}
           />
 
           <GalleryGrid items={gallery} />
 
           <div className="gallery-page__cta">
-            <p>See something you'd love for your party?</p>
+            <p>{galleryPageContent.cta}</p>
             <BookButton size="lg" />
           </div>
         </Container>

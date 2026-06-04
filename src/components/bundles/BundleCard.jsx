@@ -19,7 +19,7 @@ export default function BundleCard({ bundle, featured = false }) {
           <h3 className="bundle-card__name">{bundle.name}</h3>
           <p className="bundle-card__price">
             <span className="bundle-card__amount">{formatPrice(bundle.price)}</span>
-            <span className="bundle-card__price-suffix">/ event</span>
+            <span className="bundle-card__price-suffix">/ day</span>
           </p>
         </header>
 

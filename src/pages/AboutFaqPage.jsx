@@ -4,8 +4,7 @@ import SectionHeading from "../components/ui/SectionHeading";
 import BookButton from "../components/ui/BookButton";
 import Image from "../components/ui/Image";
 import FaqAccordion from "../components/faq/FaqAccordion";
-import { about } from "../data/about";
-import { business } from "../data/business";
+import { about, faqSection as faqSectionContent, business } from "../data/content";
 import { telHref, formatPhone } from "../lib/format";
 import "./AboutFaqPage.css";
 
@@ -14,7 +13,7 @@ export default function AboutFaqPage() {
     <>
       <SeoHead
         title={`About & FAQ | ${business.name}`}
-        description="Meet the family behind Sunshine Party Rentals. Find answers to common questions about booking, delivery, payment, weather, and safety."
+        description={about.seo.description}
         path="/about"
       />
 
@@ -22,7 +21,7 @@ export default function AboutFaqPage() {
         <Container>
           <div className="about__grid">
             <div className="about__copy">
-              <span className="about__eyebrow">About us</span>
+              <span className="about__eyebrow">{about.eyebrow}</span>
               <h1 className="about__headline">{about.headline}</h1>
               {about.paragraphs.map((p, i) => (
                 <p key={i}>{p}</p>
@@ -32,6 +31,10 @@ export default function AboutFaqPage() {
               <BookButton size="lg" />
             </div>
 
+            <div className="about__media">
+              <Image src="/images/about/naples-pier.jpg" alt="Solimar Party Rentals setup" eager />
+            </div>
+
           </div>
         </Container>
       </section>
@@ -39,18 +42,18 @@ export default function AboutFaqPage() {
       <section className="faq-section">
         <Container narrow>
           <SectionHeading
-            eyebrow="Questions & policies"
-            title="Plain answers, no fine print."
-            subtitle="If you don't see your question below, just call us — we'd rather chat than have you read fine print."
+            eyebrow={faqSectionContent.eyebrow}
+            title={faqSectionContent.title}
+            subtitle={faqSectionContent.subtitle}
           />
           <FaqAccordion />
 
           <div className="faq-section__close">
-            <p>Still have a question?</p>
+            <p>{faqSectionContent.followUpLine1}</p>
             <p>
               Call us at{" "}
               <a href={telHref(business.phone)}>{formatPhone(business.phone)}</a>{" "}
-              — we're happy to help.
+              {faqSectionContent.followUpLine2}
             </p>
           </div>
         </Container>
