@@ -17,7 +17,7 @@ export const business = {
   name: "Solimar Event Rentals",
   tagline: "Family-owned event rentals serving Southwest Florida.",
   phone: "239-000-0000",
-  email: "book@solimareventrentals.com",
+  email: "SolimarEventRentals88@gmail.com",
   instagram: "https://instagram.com/solimareventrentals",
   serviceAreas: ["Naples", "Bonita Springs", "Marco Island"],
   hours: "Mon–Sat, 8am–7pm",
