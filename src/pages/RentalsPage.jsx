@@ -16,7 +16,22 @@ export default function RentalsPage() {
         path="/rentals"
       />
 
-      {/* Bundles first — the headline offer */}
+      {/* Individual rentals */}
+      <section className="rentals-items" id="individual-rentals">
+        <Container>
+          <SectionHeading
+            eyebrow={rentalsPageContent.itemsSection.eyebrow}
+            title={rentalsPageContent.itemsSection.title}
+          />
+          <div className="rentals-items__grid">
+            {inventory.map((item) => (
+              <InventoryCard key={item.id} item={item} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Bundles */}
       <section className="rentals-bundles">
         <Container>
           <SectionHeading
@@ -26,21 +41,6 @@ export default function RentalsPage() {
           <div className="rentals-bundles__grid">
             {bundles.map((b) => (
               <BundleCard key={b.id} bundle={b} featured />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Individual rentals — secondary by design */}
-      <section className="rentals-items">
-        <Container>
-          <SectionHeading
-            eyebrow={rentalsPageContent.itemsSection.eyebrow}
-            title={rentalsPageContent.itemsSection.title}
-          />
-          <div className="rentals-items__grid">
-            {inventory.map((item) => (
-              <InventoryCard key={item.id} item={item} />
             ))}
           </div>
         </Container>
