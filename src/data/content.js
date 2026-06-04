@@ -14,11 +14,11 @@ export const features = {
 // ─── Business info ────────────────────────────────────────────────────────────
 
 export const business = {
-  name: "Solimar Party Rentals",
-  tagline: "Family-owned party rentals serving Southwest Florida.",
-  phone: "239-778-0000",
-  email: "book@solimarpartyrentals.com",
-  instagram: "https://instagram.com/solimarpartyrentals",
+  name: "Solimar Event Rentals",
+  tagline: "Family-owned event rentals serving Southwest Florida.",
+  phone: "239-000-0000",
+  email: "book@solimareventrentals.com",
+  instagram: "https://instagram.com/solimareventrentals",
   serviceAreas: ["Naples", "Bonita Springs", "Marco Island"],
   hours: "Mon–Sat, 8am–7pm",
   city: "Naples, FL",
@@ -40,9 +40,9 @@ export const nav = {
 // ─── Hero (home page banner) ──────────────────────────────────────────────────
 
 export const hero = {
-  titleLine1:   "Solimar Party",
+  titleLine1:   "Solimar Event",
   titleAccent:  "Rentals",
-  subtitle:     "Family-owned party rentals serving Southwest Florida. Tents, tables, chairs, and inflatables — delivered and set up for you.",
+  subtitle:     "Family-owned event rentals serving Southwest Florida. Tents, tables, chairs, and inflatables — delivered and set up for you.",
   primaryCta:   "Call to Book",
   secondaryCta: "Bundles",
 };
@@ -51,7 +51,7 @@ export const hero = {
 // ─── Home — Featured Bundles section ─────────────────────────────────────────
 
 export const featuredBundlesSection = {
-  title:      "Party packages",
+  title:      "Event packages",
   subtitle:   "Includes delivery and setup.",
   altLinkText: "Individual rentals →",
 };
@@ -61,7 +61,7 @@ export const featuredBundlesSection = {
 
 export const galleryPreviewSection = {
   title:    "Recent setups",
-  subtitle: "A look at real parties we've helped families host across Naples, FL.",
+  subtitle: "A look at real events we've helped families host across Naples, FL.",
   cta:      "Full gallery →",
 };
 
@@ -70,11 +70,11 @@ export const galleryPreviewSection = {
 
 export const rentalsPage = {
   seo: {
-    title:       "Party Rentals & Bundles | Naples, Bonita Springs, Marco Island",
-    description: "Browse our party rental bundles and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
+    title:       "Event Rentals & Bundles | Naples, Bonita Springs, Marco Island",
+    description: "Browse our event rental bundles and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
   },
   bundlesSection: {
-    title:   "Party Bundles",
+    title:   "Event Bundles",
   },
   itemsSection: {
     title:   "Individual Rentals",
@@ -90,12 +90,12 @@ export const rentalsPage = {
 export const about = {
   seo: {
     description:
-      "Learn about Solimar Party Rentals and find answers to common questions about booking, delivery, payment, weather, and safety.",
+      "Learn about Solimar Event Rentals and find answers to common questions about booking, delivery, payment, weather, and safety.",
   },
   eyebrow: "About Us",
-  headline: "Party rentals for local families and events.",
+  headline: "Event rentals for local families and events.",
   paragraphs: [
-    "Solimar Party Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, bounce houses, and other essentials for parties and events.",
+    "Solimar Event Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, bounce houses, and other essentials for parties and events.",
     "We serve Naples, Bonita Springs, and Marco Island. We handle delivery, setup, and pickup so you don't have to worry about the equipment.",
     "Our focus is simple: reliable service, fair pricing, and making party planning a little easier.",
   ],
