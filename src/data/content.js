@@ -54,7 +54,7 @@ export const featuredBundlesSection = {
 
 export const galleryPreviewSection = {
   title:    "Recent setups",
-  subtitle: "A look at real parties we've helped families host across SWFL.",
+  subtitle: "A look at real parties we've helped families host across Naples.",
   cta:      "Full gallery →",
 };
 
