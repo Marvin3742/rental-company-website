@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import Container from "../ui/Container";
-import { business, nav } from "../../data/content";
+import { business, nav, features } from "../../data/content";
 import { telHref, formatPhone } from "../../lib/format";
 import "./Header.css";
 
-const NAV = nav.links;
+const NAV = nav.links.filter((l) => l.to !== "/gallery" || features.showGallery);
 
 export default function Header() {
   const [open, setOpen] = useState(false);

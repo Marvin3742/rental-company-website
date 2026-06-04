@@ -3,6 +3,7 @@ import Hero from "../components/home/Hero";
 import FeaturedBundles from "../components/home/FeaturedBundles";
 import GalleryPreview from "../components/home/GalleryPreview";
 import { business } from "../data/business";
+import { features } from "../data/content";
 
 export default function HomePage() {
   return (
@@ -14,7 +15,7 @@ export default function HomePage() {
       />
       <Hero />
       <FeaturedBundles />
-      <GalleryPreview />
+      {features.showGallery && <GalleryPreview />}
     </>
   );
 }
