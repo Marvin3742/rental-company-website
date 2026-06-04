@@ -15,7 +15,7 @@ export const features = {
 
 export const business = {
   name: "Solimar Event Rentals",
-  tagline: "Family-owned event rentals serving Southwest Florida.",
+  tagline: "Family-owned event rentals in the Naples, FL area",
   phone: "239-000-0000",
   email: "SolimarEventRentals88@gmail.com",
   instagram: "https://instagram.com/solimareventrentals",
