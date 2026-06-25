@@ -1,0 +1,29 @@
+.uc {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.uc__card {
+  max-width: 32rem;
+  text-align: center;
+}
+
+.uc__logo {
+  display: block;
+  width: 100%;
+  max-width: 18rem;
+  height: auto;
+  margin: 0 auto var(--space-6);
+}
+
+.uc__text {
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--color-text-light);
+  margin: 0;
+}
