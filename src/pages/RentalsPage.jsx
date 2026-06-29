@@ -1,17 +1,16 @@
 import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
-import BookButton from "../components/ui/BookButton";
-import BundleCard from "../components/bundles/BundleCard";
+import PackageCard from "../components/packages/PackageCard";
 import InventoryCard from "../components/inventory/InventoryCard";
-import { bundles, inventory, rentalsPage as rentalsPageContent } from "../data/content";
+import { packages, inventory, rentalsPage as rentalsPageContent } from "../data/content";
 import "./RentalsPage.css";
 
 export default function RentalsPage() {
   return (
     <>
       <SeoHead
-        title={rentalsPageContent.seo.title}
+        title="Rentals"
         description={rentalsPageContent.seo.description}
         path="/rentals"
       />
@@ -22,8 +21,9 @@ export default function RentalsPage() {
           <SectionHeading
             eyebrow={rentalsPageContent.itemsSection.eyebrow}
             title={rentalsPageContent.itemsSection.title}
+            align="center"
           />
-          <div className="rentals-items__grid">
+          <div className="rentals-items__list">
             {inventory.map((item) => (
               <InventoryCard key={item.id} item={item} />
             ))}
@@ -31,31 +31,22 @@ export default function RentalsPage() {
         </Container>
       </section>
 
-      {/* Bundles */}
-      <section className="rentals-bundles">
+      {/* Packages */}
+      <section className="rentals-packages">
         <Container>
           <SectionHeading
-            eyebrow={rentalsPageContent.bundlesSection.eyebrow}
-            title={rentalsPageContent.bundlesSection.title}
+            eyebrow={rentalsPageContent.packagesSection.eyebrow}
+            title={rentalsPageContent.packagesSection.title}
+            align="center"
           />
-          <div className="rentals-bundles__grid">
-            {bundles.map((b) => (
-              <BundleCard key={b.id} bundle={b} featured />
+          <div className="rentals-packages__grid">
+            {packages.map((p) => (
+              <PackageCard key={p.id} pkg={p} featured />
             ))}
           </div>
         </Container>
       </section>
 
-      {/* Bundle nudge at the bottom */}
-      <section className="rentals-reminder">
-        <Container narrow>
-          <div className="rentals-reminder__inner">
-            <h2>{rentalsPageContent.reminder.heading}</h2>
-            <p></p>
-            <BookButton size="lg" />
-          </div>
-        </Container>
-      </section>
     </>
   );
 }

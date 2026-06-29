@@ -29,8 +29,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href={business.instagram} target="_blank" rel="noreferrer">
-                  <span aria-hidden="true"></span> Instagram
+                <a href={business.Facebook} target="_blank" rel="noreferrer">
+                  <span aria-hidden="true"></span> Follow us on Facebook
                 </a>
               </li>
             </ul>

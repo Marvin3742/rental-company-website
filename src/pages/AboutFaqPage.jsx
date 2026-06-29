@@ -12,7 +12,7 @@ export default function AboutFaqPage() {
   return (
     <>
       <SeoHead
-        title={`About & FAQ | ${business.name}`}
+        title="About & FAQ"
         description={about.seo.description}
         path="/about"
       />

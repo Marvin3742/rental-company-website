@@ -63,7 +63,7 @@
 }
 
 .site-header__logo {
-  height: 68px;
+  height: 100px;
   width: auto;
   display: block;
 }
@@ -71,7 +71,7 @@
 .site-header__brand-name {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 20px;
+  font-size: 21px;
   letter-spacing: -0.01em;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .site-header__nav-link {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 500;
   color: var(--color-text);
   text-decoration: none;

@@ -8,7 +8,7 @@ import GalleryPage from "./pages/GalleryPage";
 import UnderConstructionPage from "./pages/UnderConstructionPage";
 import { features } from "./data/content";
 
-const UNDER_CONSTRUCTION = true;
+const UNDER_CONSTRUCTION = false;
 
 export default function App() {
   if (UNDER_CONSTRUCTION) {

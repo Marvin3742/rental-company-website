@@ -16,9 +16,9 @@ export const features = {
 export const business = {
   name: "Solimar Event Rentals",
   tagline: "Family-owned event rentals in the Naples, FL area",
-  phone: "239-000-0000",
+  phone: "239-778-3742",
   email: "SolimarEventRentals88@gmail.com",
-  instagram: "https://instagram.com/solimareventrentals",
+  Facebook: "https://www.facebook.com/profile.php?id=61590500376097",
   serviceAreas: ["Naples", "Bonita Springs", "Marco Island"],
   hours: "Mon–Sat, 8am–7pm",
   city: "Naples, FL",
@@ -30,7 +30,7 @@ export const business = {
 export const nav = {
   links: [
     { to: "/",        label: "Home",       end: true },
-    { to: "/rentals", label: "Rentals" },
+    { to: "/rentals", label: "Rent" },
     { to: "/about",   label: "About & FAQ" },
     { to: "/gallery", label: "Gallery" },
   ],
@@ -44,13 +44,13 @@ export const hero = {
   titleAccent:  "Rentals",
   subtitle:     "Family-owned event rentals serving the Naples, FL area. Tents, tables, chairs, and inflatables — delivered and set up for you.",
   primaryCta:   "Call to Book",
-  secondaryCta: "Bundles",
+  secondaryCta: "View Rentals",
 };
 
 
-// ─── Home — Featured Bundles section ─────────────────────────────────────────
+// ─── Home — Featured Packages section ────────────────────────────────────────
 
-export const featuredBundlesSection = {
+export const featuredPackagesSection = {
   title:      "Event packages",
   subtitle:   "Includes delivery and setup.",
   altLinkText: "Individual rentals →",
@@ -70,17 +70,17 @@ export const galleryPreviewSection = {
 
 export const rentalsPage = {
   seo: {
-    title:       "Event Rentals & Bundles | Naples, Bonita Springs, Marco Island",
-    description: "Browse our event rental bundles and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
+    title:       "Event Rentals & Packages | Naples, Bonita Springs, Marco Island",
+    description: "Browse our event rental packages and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
   },
-  bundlesSection: {
-    title:   "Event Bundles",
+  packagesSection: {
+    title:   "Packages",
   },
   itemsSection: {
-    title:   "Individual Rentals",
+    title:   "Tents, Chairs, Tables, and Inflatables",
   },
   reminder: {
-    heading: "Bundles include delivery and setup.",
+    heading: "Packages include delivery and setup.",
   },
 };
 
@@ -95,7 +95,7 @@ export const about = {
   eyebrow: "About Us",
   headline: "Event rentals for local families and events.",
   paragraphs: [
-    "Solimar Event Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, bounce houses, and other essentials for parties and events.",
+    "Solimar Event Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, inflatables, and other essentials for parties and events.",
     "We serve Naples, Bonita Springs, and Marco Island. We handle delivery, setup, and pickup so you don't have to worry about the equipment.",
     "Our focus is simple: reliable service, fair pricing, and making party planning a little easier.",
   ],
@@ -123,64 +123,62 @@ export const galleryPage = {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 export const footer = {
-  contactHeading:  "Get in touch",
-  servingHeading:  "Serving",
   serviceAreaSuffix: ", FL",
-  bottomCta:       "Call us to book a bundle",  // phone is appended after a dash
+  bottomCta:       "Call us to book",  // phone is appended after a dash
 };
 
 
-// ─── Bundles ──────────────────────────────────────────────────────────────────
-// Each bundle needs: id, name, price (number), badge, tagline, image, includes[]
+// ─── Packages ─────────────────────────────────────────────────────────────────
+// Each package needs: id, name, price (number), badge, tagline, image, includes[]
 
-export const bundles = [
+export const packages = [
   {
-    id:      "Bundle_1",
-    name:    "Bundle #1",
-    price:   700,
-    image:   "/images/bundles/essentials-plus.jpg",
+    id:      "Package_1",
+    name:    "Package #1",
+    price:   910,
+    image:   "/images/packages/essentials-plus.jpg",
     includes: [
       "20×30 Premium frame tent",
-      "9 tables",
-      "60 chairs",
-      "Inflatable bounce house",
+      "9 Tables",
+      "72 chairs",
+      "18ft Waterslide",
       "Delivery & setup included",
     ],
   },
   {
-    id:      "Bundle_2",
-    name:    "Bundle #2",
-    price:   600,
-    image:   "/images/bundles/essentials.jpg",
+    id:      "Package_2",
+    name:    "Package #2",
+    price:   575,
+    image:   "/images/packages/essentials.jpg",
     includes: [
       "20×30 Premium frame tent",
-      "9 tables",
-      "60 chairs",
+      "9 Tables",
+      "72 Chairs",
       "Delivery & setup included",
     ],
   },
     {
-    id:      "Bundle_3",
-    name:    "Bundle #3",
-    price:   500,
-    image:   "/images/bundles/essentials-plus.jpg",
+    id:      "Package_3",
+    name:    "Package #3",
+    price:   775,
+    image:   "/images/packages/essentials-plus.jpg",
     includes: [
       "20×20 Premium frame tent",
-      "6 tables",
-      "45 chairs",
+      "6 Tables",
+      "45 Chairs",
       "Inflatable bounce house",
       "Delivery & setup included",
     ],
   },
   {
-    id:      "Bundle_4",
-    name:    "Bundle #4",
-    price:   400,
-    image:   "/images/bundles/essentials.jpg",
+    id:      "Package_4",
+    name:    "Package #4",
+    price:   450,
+    image:   "/images/packages/essentials.jpg",
     includes: [
       "20×20 Premium frame tent",
-      "6 tables",
-      "45 chairs",
+      "6 Tables",
+      "45 Chairs",
       "Delivery & setup included",
     ],
   },
@@ -203,17 +201,17 @@ export const faqs = [
   {
     category: "Booking",
     question:  "How do I book a rental?",
-    answer:    "Just send us a call, if we don't answer, leave a text.",
+    answer:    "You can reach us at 239-778-3742. Text is preferred.",
   },
   {
     category: "Delivery & Setup",
     question:  "Is delivery included?",
-    answer:    "Yes, we deliver throughout Naples, Bonita Springs, and Marco Island. A small fee may be applied for small orders.",
+    answer:    "We deliver throughout Naples, Bonita Springs, and Marco Island. Small orders or addresses outside this area require a small delivery fee",
   },
   {
     category: "Delivery & Setup",
     question:  "How long does setup take?",
-    answer:    "Most setups take 30 to 60 minutes.",
+    answer:    "Between 40-60 minutes",
   },
   {
     category: "Payment",
@@ -223,17 +221,12 @@ export const faqs = [
   {
     category: "Payment",
     question:  "Is a deposit required?",
-    answer:    "Yes, a small non-refundable deposit is required to protect against last minute cancellations.",
-  },
-  {
-    category: "Cancellation & Weather",
-    question:  "What happens if it rains?",
-    answer:    "In case of severe weather, we would be happy to reschedule your event to a later date.",
+    answer:    "Yes",
   },
   {
     category: "Cancellation & Weather",
     question:  "What's your cancellation policy?",
-    answer:    "Cancellations more than 7 days before your event are refunded in full. Closer than that, we'll happily apply your payment toward a future booking.",
+    answer:    "Cancellations more than 7 days before your event are refunded in full. Closer than that, we'll happily apply your deposit towards a future booking.",
   },
 
 
@@ -243,13 +236,70 @@ export const faqs = [
 // ─── Individual inventory items ───────────────────────────────────────────────
 // unit: "each" → price per piece  |  unit: "day" → flat daily price
 
+// images: array of photo paths shown in a click-through carousel on the rentals page
+// description: short paragraph shown next to the photos
+// details: bullet points of practical/important info (dimensions, capacity, setup notes, etc.)
 export const inventory = [
-  { id: "chair",  name: "Plastic Folding Chair", price: 3,   unit: "each", image: "/images/inventory/chair.jpg" },
-  { id: "table6",  name: "6ft Table",             price: 10,  unit: "each", image: "/images/inventory/table.jpg" },
-  { id: "table8",  name: "8ft Table",             price: 12,  unit: "each", image: "/images/inventory/table.jpg" },
-  { id: "tent20x20",   name: "20×20 Tent",            price: 250, unit: "day",  image: "/images/inventory/tent.jpg"  },
-  { id: "tent20x30",   name: "20×30 Tent",            price: 350, unit: "day",  image: "/images/inventory/tent.jpg"  },
-  { id: "bounce", name: "Bounce House",           price: 175, unit: "day",  image: "/images/inventory/bounce.jpg" },
+  {
+    id: "waterslide",
+    name: "18FT Baja Splash Waterslide",
+    price: 300,
+    unit: "day",
+    image: "/images/inventory/slide2.jpg",
+    images: ["/images/inventory/slide2.jpg", "/images/inventory/slide3.png", "/images/inventory/slide1.png"],
+    description: "32.5ft L x 19ft W x 18ft H",
+    details: ["Requires water & power source to be within 70 ft", "Setup & breakdown included"],
+  },
+    {
+    id: "tent20x30",
+    name: "20×30 Premium Frame Tent",
+    price: 350,
+    unit: "day",
+    image: "/images/inventory/tent1.png",
+    images: ["/images/inventory/tent1.png", "/images/inventory/20x30seating.jpg"],
+    description: "600 sqft tent, seating for up to 76 guests. Setup & breakdown included.",
+    details: ["Tent lighting add-on available"],
+  },
+  {
+    id: "tent20x20",
+    name: "20×20 Premium Frame Tent",
+    price: 300,
+    unit: "day",
+    image: "/images/inventory/tent2.png",
+    images: ["/images/inventory/tent2.png", "/images/inventory/20x20seating1.jpg", "/images/inventory/20x20seating2.jpg", "/images/inventory/20x20seating3.jpg"],
+    description: "400 sqft tent, seating for up to 54 guests. Setup & breakdown included.",
+    details: ["Tent lighting add-on available"],
+  },
+  {
+    id: "table8",
+    name: "8FT White Folding Table",
+    price: 12,
+    unit: "each",
+    image: "/images/inventory/table.jpg",
+    images: ["/images/inventory/table.jpg"],
+    description: "Rectangular 8ft folding table, seats up to 8 guests.",
+    details: ["Seats 8", "96in x 30in", "Linens add-on available"],
+  },
+  {
+    id: "table6",
+    name: "6FT White Folding Table",
+    price: 10,
+    unit: "each",
+    image: "/images/inventory/table.jpg",
+    images: ["/images/inventory/table.jpg"],
+    description: "Rectangular 6ft folding table, seats up to 6 guests.",
+    details: ["Seats 6", "72in x 30in", "Linens add-on available"],
+  },
+  {
+    id: "chair",
+    name: "Plastic Folding Chair",
+    price: 2.75,
+    unit: "each",
+    image: "/images/inventory/chair.jpg",
+    images: ["/images/inventory/chair.jpg"],
+    description: "White plastic folding chairs.",
+    details: [],
+  }
 ];
 
 

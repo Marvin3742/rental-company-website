@@ -1,11 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { business } from "../data/business";
 
-const SITE_URL = "https://sunshinepartyrentals.com"; // update when deploying
+const SITE_URL = "https://solimareventrentals.com"; 
 
 export default function SeoHead({ title, description, path = "/", image }) {
   const url = `${SITE_URL}${path}`;
-  const fullTitle = title || `${business.name} — Party Rentals in Southwest Florida`;
+  const fullTitle = title ? `${business.name} | ${title}` : business.name;
   return (
     <Helmet>
       <title>{fullTitle}</title>

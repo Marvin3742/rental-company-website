@@ -1,32 +1,32 @@
 :root {
-  /* Beach summer — sand + ocean turquoise + sunset coral */
-  --color-bg: #f1ecec;             /* pale sand */
-  --color-bg-soft: #ece3d4;        /* warmer wet-sand */
+  /* Blue — clean neutrals + blue accents */
+  --color-bg: #f4f6fb;             /* pale blue-tinted */
+  --color-bg-soft: #e7edf6;        /* soft blue-grey */
   --color-surface: #ffffff;
 
-  --color-accent: #e63946;         /* cherry red (primary) */
-  --color-accent-soft: #fad4d8;    /* blush rose */
-  --color-accent-deep: #b11e2b;    /* deep cherry (hover/active) */
+  --color-accent: #1d4ed8;         /* blue (primary) */
+  --color-accent-soft: #dbe6fb;    /* light blue */
+  --color-accent-deep: #1e3a8a;    /* deep navy blue (hover/active) */
 
-  --color-sun: #ee9d5a;            /* sunset coral (warm secondary) */
-  --color-sun-soft: #fbc89d;       /* peach glow */
+  --color-sun: #2563eb;            /* bright blue (secondary) */
+  --color-sun-soft: #2563eb;       /* sky blue */
 
-  --color-text: #1c3a40;           /* deep ocean navy */
-  --color-text-light: #4d6770;
-  --color-muted: #7d8e91;
-  --color-border: #e6d9c0;
-  --color-border-strong: #cfbf9d;
-  --color-success: #7aaf60;        /* sea grass */
+  --color-text: #142033;           /* deep blue-navy */
+  --color-text-light: #475569;
+  --color-muted: #7b8aa0;
+  --color-border: #cdd9ec;
+  --color-border-strong: #1d4ed8;
+  --color-success: #2f9e6f;        /* teal-green */
 
   --radius-sm: 0;
   --radius-md: 0;
   --radius-lg: 0;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(28, 58, 64, 0.05);
-  --shadow-card: 0 2px 4px rgba(28, 58, 64, 0.04), 0 8px 24px rgba(28, 58, 64, 0.06);
-  --shadow-card-hover: 0 4px 8px rgba(28, 58, 64, 0.06), 0 12px 32px rgba(28, 58, 64, 0.1);
-  --shadow-lg: 0 8px 16px rgba(28, 58, 64, 0.08), 0 24px 64px rgba(28, 58, 64, 0.12);
+  --shadow-sm: 0 1px 2px rgba(20, 32, 51, 0.05);
+  --shadow-card: 0 2px 4px rgba(20, 32, 51, 0.04), 0 8px 24px rgba(20, 32, 51, 0.06);
+  --shadow-card-hover: 0 4px 8px rgba(20, 32, 51, 0.06), 0 12px 32px rgba(20, 32, 51, 0.1);
+  --shadow-lg: 0 8px 16px rgba(20, 32, 51, 0.08), 0 24px 64px rgba(20, 32, 51, 0.12);
 
   --space-1: 4px;
   --space-2: 8px;

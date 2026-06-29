@@ -3,14 +3,14 @@ import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
 import BookButton from "../components/ui/BookButton";
 import GalleryGrid from "../components/gallery/GalleryGrid";
-import { gallery, galleryPage as galleryPageContent, business } from "../data/content";
+import { gallery, galleryPage as galleryPageContent } from "../data/content";
 import "./GalleryPage.css";
 
 export default function GalleryPage() {
   return (
     <>
       <SeoHead
-        title={`Gallery | ${business.name}`}
+        title="Gallery"
         description={galleryPageContent.seo.description}
         path="/gallery"
       />

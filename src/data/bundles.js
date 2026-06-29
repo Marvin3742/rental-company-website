@@ -1,1 +1,0 @@
-export { bundles } from './content';
