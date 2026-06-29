@@ -1,9 +1,16 @@
 .site-header {
-  position: fixed;
+  position: relative;
+  z-index: 50;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Home page: nav floats transparently over the hero image */
+.site-header--over-hero {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
   background: transparent;
   border-bottom: none;
 }
