@@ -243,7 +243,7 @@ export const inventory = [
   {
     id: "waterslide",
     name: "18FT Baja Splash Waterslide",
-    price: 300,
+    price: 350,
     unit: "day",
     image: "/images/inventory/slide2.jpg",
     images: ["/images/inventory/slide2.jpg", "/images/inventory/slide3.png", "/images/inventory/slide1.png"],
