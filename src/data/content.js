@@ -166,7 +166,7 @@ export const packages = [
       "20×20 Premium frame tent",
       "6 Tables",
       "45 Chairs",
-      "Inflatable bounce house",
+      "18ft Waterslide",
       "Delivery & setup included",
     ],
   },
