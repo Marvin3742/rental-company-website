@@ -37,6 +37,7 @@ export default function RentalsPage() {
           <SectionHeading
             eyebrow={rentalsPageContent.packagesSection.eyebrow}
             title={rentalsPageContent.packagesSection.title}
+            subtitle={rentalsPageContent.packagesSection.subtitle}
             align="center"
           />
           <div className="rentals-packages__grid">

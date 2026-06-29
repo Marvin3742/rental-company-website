@@ -74,7 +74,8 @@ export const rentalsPage = {
     description: "Browse our event rental packages and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
   },
   packagesSection: {
-    title:   "Packages",
+    title:    "Packages",
+    subtitle: "Save 10% when you book one of our packages.",
   },
   itemsSection: {
     title:   "Tents, Chairs, Tables, and Inflatables",
