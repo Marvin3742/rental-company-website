@@ -9,7 +9,7 @@ export default function UnderConstructionPage() {
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="uc__card">
-        <img className="uc__logo" src="/images/Solimar.png" alt="Solimar" />
+        <img className="uc__logo" src="/images/Solimar.webp" alt="Solimar" />
         <p className="uc__text">Site under construction, please come back later!</p>
       </div>
     </div>

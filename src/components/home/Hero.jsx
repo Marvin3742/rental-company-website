@@ -9,7 +9,7 @@ export default function Hero() {
     <section className="hero">
       <div className="hero__bg" aria-hidden="true">
         <img
-          src="/images/hero/hero.jpg"
+          src="/images/hero/hero.webp"
           alt=""
           loading="eager"
           decoding="async"

@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="site-footer__grid">
           <div>
             <p className="site-footer__brand">
-              <img src="/images/Solimar.png" alt={business.name} className="site-footer__logo" />
+              <img src="/images/Solimar.webp" alt={business.name} className="site-footer__logo" />
             </p>
           </div>
 
