@@ -1,6 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// SITE CONTENT — edit everything here.
-// Changes made in this file update the whole website automatically.
+// SITE CONTENT — marketing copy & configuration.
+// Edit text here (business info, nav, hero, About, FAQs, gallery, footer) and the
+// site updates automatically. The rental CATALOG (products & packages) is NOT
+// here — it's database-driven and managed in /admin (seed defaults live in
+// prisma/seed-data.js).
 // ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -43,7 +46,7 @@ export const hero = {
   titleLine1:   "Solimar Event",
   titleAccent:  "Rentals",
   subtitle:     "Family-owned event rentals serving the Naples, FL area. Tents, tables, chairs, and inflatables — delivered and set up for you.",
-  primaryCta:   "Call to Book",
+  primaryCta:   "Call us",
   secondaryCta: "View Rentals",
 };
 
@@ -53,7 +56,7 @@ export const hero = {
 export const featuredPackagesSection = {
   title:      "Event packages",
   subtitle:   "Includes delivery and setup.",
-  altLinkText: "Individual rentals →",
+  altLinkText: "Individual rentals",
 };
 
 
@@ -62,7 +65,7 @@ export const featuredPackagesSection = {
 export const galleryPreviewSection = {
   title:    "Recent setups",
   subtitle: "A look at real events we've helped families host across Naples, FL.",
-  cta:      "Full gallery →",
+  cta:      "Full gallery",
 };
 
 
@@ -129,61 +132,10 @@ export const footer = {
 };
 
 
-// ─── Packages ─────────────────────────────────────────────────────────────────
-// Each package needs: id, name, price (number), badge, tagline, image, includes[]
-
-export const packages = [
-  {
-    id:      "Package_1",
-    name:    "Package #1",
-    price:   910,
-    image:   "/images/packages/essentials-plus.webp",
-    includes: [
-      "20×30 Premium frame tent",
-      "9 Tables",
-      "72 chairs",
-      "18ft Waterslide",
-      "Delivery & setup included",
-    ],
-  },
-  {
-    id:      "Package_2",
-    name:    "Package #2",
-    price:   575,
-    image:   "/images/packages/essentials.webp",
-    includes: [
-      "20×30 Premium frame tent",
-      "9 Tables",
-      "72 Chairs",
-      "Delivery & setup included",
-    ],
-  },
-    {
-    id:      "Package_3",
-    name:    "Package #3",
-    price:   775,
-    image:   "/images/packages/essentials-plus.webp",
-    includes: [
-      "20×20 Premium frame tent",
-      "6 Tables",
-      "45 Chairs",
-      "18ft Waterslide",
-      "Delivery & setup included",
-    ],
-  },
-  {
-    id:      "Package_4",
-    name:    "Package #4",
-    price:   450,
-    image:   "/images/packages/essentials.webp",
-    includes: [
-      "20×20 Premium frame tent",
-      "6 Tables",
-      "45 Chairs",
-      "Delivery & setup included",
-    ],
-  },
-];
+// ─── Catalog (products & packages) is database-driven ────────────────────────
+// The rental catalog is NOT here. It's served from the database (/api/products,
+// /api/packages) and managed in /admin. Initial seed defaults live in
+// prisma/seed-data.js.
 
 
 // ─── FAQs ─────────────────────────────────────────────────────────────────────
@@ -202,7 +154,7 @@ export const faqs = [
   {
     category: "Booking",
     question:  "How do I book a rental?",
-    answer:    "You can reach us at 239-778-3742. Text is preferred.",
+    answer:    "Call or text us at 239-778-3742 to book — text is preferred. You can also book online: browse our rentals, add them to your cart, pick your date, and check out.",
   },
   {
     category: "Delivery & Setup",
@@ -231,76 +183,6 @@ export const faqs = [
   },
 
 
-];
-
-
-// ─── Individual inventory items ───────────────────────────────────────────────
-// unit: "each" → price per piece  |  unit: "day" → flat daily price
-
-// images: array of photo paths shown in a click-through carousel on the rentals page
-// description: short paragraph shown next to the photos
-// details: bullet points of practical/important info (dimensions, capacity, setup notes, etc.)
-export const inventory = [
-  {
-    id: "waterslide",
-    name: "18FT Baja Splash Dual Lane Waterslide",
-    price: 350,
-    unit: "day",
-    image: "/images/inventory/slide2.webp",
-    images: ["/images/inventory/slide2.webp", "/images/inventory/slide3.webp", "/images/inventory/slide1.webp"],
-    description: "32.5ft L x 19ft W x 18ft H",
-    details: ["Requires water & power source to be within 70 ft", "Setup & breakdown included"],
-  },
-    {
-    id: "tent20x30",
-    name: "20×30 Premium Frame Tent",
-    price: 350,
-    unit: "day",
-    image: "/images/inventory/tent1.webp",
-    images: ["/images/inventory/tent1.webp", "/images/inventory/20x30seating.jpg"],
-    description: "600 sqft tent, seating for up to 76 guests. Setup & breakdown included.",
-    details: ["Tent lighting add-on available"],
-  },
-  {
-    id: "tent20x20",
-    name: "20×20 Premium Frame Tent",
-    price: 300,
-    unit: "day",
-    image: "/images/inventory/tent2.webp",
-    images: ["/images/inventory/tent2.webp", "/images/inventory/20x20seating1.webp", "/images/inventory/20x20seating2.webp", "/images/inventory/20x20seating3.webp"],
-    description: "400 sqft tent, seating for up to 54 guests. Setup & breakdown included.",
-    details: ["Tent lighting add-on available"],
-  },
-  {
-    id: "table8",
-    name: "8FT White Folding Table",
-    price: 12,
-    unit: "each",
-    image: "/images/inventory/table.webp",
-    images: ["/images/inventory/table.webp"],
-    description: "Rectangular 8ft folding table, seats up to 8 guests.",
-    details: ["Seats 8", "96in x 30in", "Linens add-on available"],
-  },
-  {
-    id: "table6",
-    name: "6FT White Folding Table",
-    price: 10,
-    unit: "each",
-    image: "/images/inventory/table.webp",
-    images: ["/images/inventory/table.webp"],
-    description: "Rectangular 6ft folding table, seats up to 6 guests.",
-    details: ["Seats 6", "72in x 30in", "Linens add-on available"],
-  },
-  {
-    id: "chair",
-    name: "Plastic Folding Chair",
-    price: 2.75,
-    unit: "each",
-    image: "/images/inventory/chair.webp",
-    images: ["/images/inventory/chair.webp"],
-    description: "White plastic folding chairs.",
-    details: [],
-  }
 ];
 
 

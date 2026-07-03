@@ -1,0 +1,227 @@
+// Solimar Event Rentals — booking + payments data model.
+// Money is stored in integer CENTS everywhere (never floats — the chair is $2.75).
+// Event dates are day-granular (@db.Date); rentals are single-day with a next-day
+// pickup, modeled as a configurable turnaround buffer on reservations.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Pooled connection (PgBouncer) used by serverless functions at runtime.
+  url       = env("DATABASE_URL")
+  // Direct connection used by `prisma migrate` / `db push`.
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+enum ProductUnit {
+  EACH
+  DAY
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+  COMPLETED
+}
+
+enum PaymentMode {
+  FULL
+  DEPOSIT
+}
+
+enum ReservationStatus {
+  HELD
+  CONFIRMED
+  RELEASED
+}
+
+enum LineType {
+  ITEM // an à-la-carte product line
+  PACKAGE_COMPONENT // a product line exploded from a package's BOM (drives reservations)
+  PACKAGE_DISPLAY // a non-reserving display/receipt row for the package as a whole
+}
+
+// ─── Catalog ────────────────────────────────────────────────────────────────
+
+/// Atomic rentable unit. 1:1 with `inventory[]` in src/data/content.js (keyed by slug).
+model Product {
+  id            String      @id @default(cuid())
+  slug          String      @unique // = content.js item id (e.g. "tent20x30")
+  name          String
+  description   String?
+  details       Json? // string[] of bullet points
+  images        Json? // string[] of image paths
+  priceCents    Int
+  unit          ProductUnit
+  totalStock    Int         @default(0) // OWNER INPUT — real counts before go-live
+  stripeTaxCode String? // Stripe Tax product tax code (txcd_...)
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  packageItems PackageItem[]
+  bookingLines BookingLine[]
+  reservations Reservation[]
+  blackouts    Blackout[]
+}
+
+/// A pre-built bundle. 1:1 with `packages[]` in content.js (keyed by slug).
+model Package {
+  id              String   @id @default(cuid())
+  slug            String   @unique // = content.js package id (e.g. "Package_1")
+  name            String
+  priceCents      Int
+  image           String?
+  includesDisplay Json? // original human-readable `includes` strings, verbatim for marketing
+  badge           String?
+  tagline         String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items        PackageItem[]
+  bookingLines BookingLine[] @relation("PackageDisplayLines")
+}
+
+/// Structured bill-of-materials: how many of each Product a Package consumes.
+/// This (not includesDisplay) is what the availability engine reads.
+model PackageItem {
+  packageId String
+  productId String
+  quantity  Int
+
+  package Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([packageId, productId])
+}
+
+// ─── Bookings ───────────────────────────────────────────────────────────────
+
+model Booking {
+  id     String        @id @default(cuid())
+  status BookingStatus @default(PENDING)
+
+  // Scheduling (single-day; times are customer PREFERENCES, confirmed by phone).
+  eventDate          DateTime @db.Date
+  dropoffLatestTime  String? // "HH:MM" — latest acceptable drop-off (>= 06:30)
+  pickupEarliestTime String? // "HH:MM" — earliest acceptable pickup
+  pickupSameDay      Boolean  @default(false)
+  timesConfirmed     Boolean  @default(false) // owner sets after the confirmation call
+
+  // Customer + delivery.
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  deliveryAddress String // composed multi-line string, kept as-is for receipts/display
+
+  // Structured delivery address — the queryable source of truth (filter/sort by city, etc.).
+  // Nullable so legacy bookings (pre-migration) remain valid; new bookings always populate them.
+  deliveryStreet String?
+  deliveryUnit   String? // apt / unit (optional)
+  deliveryCity   String?
+  deliveryState  String?
+  deliveryZip    String?
+  deliveryNotes  String? // customer delivery notes (optional)
+
+  // Money (all cents). Server-computed; client values are never trusted.
+  subtotalCents          Int
+  taxCents               Int         @default(0)
+  deliveryFeeCents       Int         @default(0)
+  totalCents             Int
+  paymentMode            PaymentMode
+  amountPaidCents        Int         @default(0)
+  balanceDueCents        Int         @default(0)
+  balanceCollectedMethod String? // e.g. "cash" | "zelle" | "card" (set in admin)
+
+  // Lifecycle + Stripe.
+  holdExpiresAt       DateTime? // set while PENDING; nulled on CONFIRMED
+  stripeSessionId     String?   @unique
+  stripePaymentIntent String?
+  confirmedAt         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  lines        BookingLine[]
+  reservations Reservation[]
+
+  @@index([eventDate, status])
+  @@index([status, holdExpiresAt])
+  @@index([deliveryCity])
+}
+
+/// Line items, flattened to Products (packages exploded into PACKAGE_COMPONENT rows
+/// so the engine only reasons about products), plus one PACKAGE_DISPLAY row per package.
+model BookingLine {
+  id              String   @id @default(cuid())
+  bookingId       String
+  productId       String? // null for PACKAGE_DISPLAY rows
+  sourcePackageId String? // provenance for component/display rows
+  quantity        Int
+  unitPriceCents  Int
+  lineType        LineType
+
+  booking Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+  package Package? @relation("PackageDisplayLines", fields: [sourcePackageId], references: [id])
+}
+
+/// Per-product reservation window — the hot path for availability.
+/// startDate..endDate spans the event date plus the turnaround buffer.
+model Reservation {
+  id        String            @id @default(cuid())
+  productId String
+  bookingId String
+  quantity  Int
+  startDate DateTime          @db.Date
+  endDate   DateTime          @db.Date
+  status    ReservationStatus @default(HELD)
+  expiresAt DateTime? // set while HELD; nulled/irrelevant once CONFIRMED
+
+  product Product @relation(fields: [productId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([productId, startDate, endDate, status])
+}
+
+// ─── Admin / config ──────────────────────────────────────────────────────────
+
+/// Owner-defined block-outs (maintenance, holidays, offline bookings).
+/// productId null = the whole day is blocked for everything.
+model Blackout {
+  id        String   @id @default(cuid())
+  productId String?
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  reason    String?
+  createdAt DateTime @default(now())
+
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@index([startDate, endDate])
+}
+
+/// Single-row business config (id is always "singleton").
+model Setting {
+  id                String   @id @default("singleton")
+  maxBookingsPerDay Int      @default(3) // one delivery team — hard daily cap
+  depositPct        Int      @default(30) // deposit percentage of grand total
+  bufferDays        Int      @default(1) // turnaround days added after event date
+  deliveryFeeCents  Int      @default(0) // flat fee (0 = included within service area)
+  serviceHours      String? // human-readable, for display
+  updatedAt         DateTime @updatedAt
+}
+
+/// One owner login for the admin dashboard.
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}

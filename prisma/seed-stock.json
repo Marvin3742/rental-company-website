@@ -1,0 +1,44 @@
+{
+  "_notes": [
+    "OWNER INPUT REQUIRED before go-live. These numbers are NOT in src/data/content.js.",
+    "1) 'stock' = how many of each item you physically own. Values below are PLACEHOLDERS — replace with real counts.",
+    "2) 'packageBom' = exactly what each package consumes. TABLE SIZE IS AMBIGUOUS: the package 'includes' just says '9 Tables'/'6 Tables'. We defaulted to table8 (8ft). If a package actually uses 6ft tables, change productSlug to 'table6'.",
+    "3) 'stripeTaxCodes.default' = the Stripe Tax product tax code applied to all items (set after enabling Stripe Tax). 'txcd_99999999' is the general-tangible-goods fallback.",
+    "Slugs must match the item ids in src/data/content.js: baja-splash-18ft, tent20x30, tent20x20, table8, table6, chair."
+  ],
+  "stock": {
+    "baja-splash-18ft": 1,
+    "tent20x30": 1,
+    "tent20x20": 1,
+    "table8": 12,
+    "table6": 8,
+    "chair": 130
+  },
+  "packageBom": {
+    "Package_1": [
+      { "productSlug": "tent20x30", "quantity": 1 },
+      { "productSlug": "table8", "quantity": 9 },
+      { "productSlug": "chair", "quantity": 72 },
+      { "productSlug": "baja-splash-18ft", "quantity": 1 }
+    ],
+    "Package_2": [
+      { "productSlug": "tent20x30", "quantity": 1 },
+      { "productSlug": "table8", "quantity": 9 },
+      { "productSlug": "chair", "quantity": 72 }
+    ],
+    "Package_3": [
+      { "productSlug": "tent20x20", "quantity": 1 },
+      { "productSlug": "table8", "quantity": 6 },
+      { "productSlug": "chair", "quantity": 45 },
+      { "productSlug": "baja-splash-18ft", "quantity": 1 }
+    ],
+    "Package_4": [
+      { "productSlug": "tent20x20", "quantity": 1 },
+      { "productSlug": "table8", "quantity": 6 },
+      { "productSlug": "chair", "quantity": 45 }
+    ]
+  },
+  "stripeTaxCodes": {
+    "default": "txcd_99999999"
+  }
+}

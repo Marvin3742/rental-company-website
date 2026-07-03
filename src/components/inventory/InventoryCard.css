@@ -25,15 +25,15 @@
   }
 }
 
-.inv-card__photo-row {
+.inv-card__controls {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  justify-content: center;
+  gap: var(--space-3);
 }
 
 .inv-card__main-photo {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   aspect-ratio: 4 / 3;
   background: var(--color-bg-soft);
   border-radius: var(--radius-sm);
@@ -46,13 +46,22 @@
   object-fit: contain;
 }
 
+.inv-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
 .inv-card__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   border: none;
   background: none;
   color: var(--color-text);
-  font-size: 28px;
-  line-height: 1;
   padding: 0 var(--space-1);
   cursor: pointer;
   transition: color var(--transition-base);
@@ -134,4 +143,9 @@
   gap: 4px;
   font-size: 14px;
   color: var(--color-text);
+}
+
+.inv-card__cta {
+  margin-top: var(--space-3);
+  align-self: flex-start;
 }

@@ -1,1 +1,0 @@
-export { about } from './content';

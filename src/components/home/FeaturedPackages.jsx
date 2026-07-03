@@ -1,11 +1,27 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import PackageCard from "../packages/PackageCard";
-import { packages, featuredPackagesSection } from "../../data/content";
+import { fetchPackages } from "../../lib/catalog";
+import { featuredPackagesSection } from "../../data/content";
 import "./FeaturedPackages.css";
 
 export default function FeaturedPackages() {
+  const [packages, setPackages] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPackages()
+      .then((data) => !cancelled && setPackages(data))
+      .catch(() => !cancelled && setPackages([]));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (packages !== null && packages.length === 0) return null;
+
   return (
     <section className="featured-packages" id="packages">
       <Container>
@@ -17,8 +33,8 @@ export default function FeaturedPackages() {
         />
 
         <div className="featured-packages__grid">
-          {packages.map((p) => (
-            <PackageCard key={p.id} pkg={p} />
+          {(packages ?? []).map((p) => (
+            <PackageCard key={p.slug} pkg={p} />
           ))}
         </div>
 

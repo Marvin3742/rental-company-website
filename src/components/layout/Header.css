@@ -124,6 +124,48 @@
   color: var(--color-text);
 }
 
+.site-header__cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  text-decoration: none;
+  color: var(--color-text);
+  flex: none;
+}
+
+.site-header__cart-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-header--over-hero .site-header__cart {
+  color: #fff;
+}
+
+.site-header--over-hero .site-header__cart-icon {
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.45));
+}
+
+.site-header__cart-count {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
 .site-header__toggle {
   display: inline-flex;
   align-items: center;

@@ -1,1 +1,0 @@
-export { gallery } from './content';

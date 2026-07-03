@@ -16,7 +16,20 @@
 }
 
 .rentals-items {
-  padding: var(--space-9) 0 var(--space-8);
+  padding: 0 0 var(--space-8);
+}
+
+/* Full-width blue title banner */
+.rentals-banner {
+  margin: 0 0 var(--space-8);
+  padding: var(--space-7) var(--space-5);
+  background: var(--color-accent-deep);
+  color: #fff;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 3.75rem);
+  line-height: 1.15;
 }
 
 .rentals-items__list {
@@ -25,3 +38,8 @@
   gap: var(--space-9);
 }
 
+.rentals-items__status {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--space-6) 0;
+}

@@ -20,7 +20,6 @@ export default function BookButton({
       className={className}
       aria-label={`Call ${formatPhone(business.phone)} to book your party`}
     >
-      <span aria-hidden="true"></span>
       {text}
     </Button>
   );

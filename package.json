@@ -7,18 +7,37 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "admin:create": "node --env-file=.env prisma/create-admin.mjs"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/roboto": "^5.2.10",
+    "@prisma/client": "^6.19.3",
+    "@vercel/blob": "^2.5.0",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
+    "jsonwebtoken": "^9.0.3",
     "react": "^19.2.6",
+    "react-day-picker": "^10.0.1",
     "react-dom": "^19.2.6",
     "react-helmet-async": "^3.0.0",
     "react-router-dom": "^7.15.1",
-    "yet-another-react-lightbox": "^3.32.0"
+    "resend": "^6.16.0",
+    "stripe": "^22.3.0",
+    "yet-another-react-lightbox": "^3.32.0",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -29,6 +48,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "prisma": "^6.19.3",
     "vite": "^8.0.12",
     "vite-plugin-sitemap": "^0.8.2"
   }
