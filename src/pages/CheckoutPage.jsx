@@ -61,8 +61,8 @@ export default function CheckoutPage() {
     state: "FL",
     zip: "",
     notes: "",
-    dropoffLatest: "09:00",
-    pickupEarliest: "11:00",
+    dropoffLatest: "12:00",
+    pickupEarliest: "06:30",
     pickupSameDay: false,
   });
   const update = (key) => (e) =>
@@ -274,9 +274,8 @@ export default function CheckoutPage() {
             <div className="checkout-section">
               <h2 className="checkout-section__title">Delivery &amp; pickup</h2>
               <p className="checkout-hint">
-                Default is morning drop-off and next-day pickup by 12:00 PM (same-day if possible).
-                These are preferences — <strong>we’ll call to confirm exact times</strong> (in 2-hour
-                windows).
+                What is the latest you need us to be there by and what is the earliest we can come and pick up your equipment?
+                These are preferences, <strong>we’ll call to confirm exact times</strong>.
               </p>
               <div className="checkout-fields">
                 <label className="checkout-field">
@@ -302,7 +301,7 @@ export default function CheckoutPage() {
               </div>
               <label className="checkout-checkbox">
                 <input type="checkbox" checked={form.pickupSameDay} onChange={update("pickupSameDay")} />
-                <span>Same-day pickup if possible</span>
+                <span>Same-day pickup if possible (6-8 PM)</span>
               </label>
             </div>
 
@@ -408,7 +407,7 @@ export default function CheckoutPage() {
                   <span className="checkout-payopt__title">Pay {settings.depositPct}% deposit now</span>
                   <span className="checkout-payopt__amount">{formatCents(depositCents)}</span>
                   <span className="checkout-payopt__sub">
-                    {formatCents(totalCents - depositCents)} balance collected on delivery
+                    {formatCents(totalCents - depositCents)} balance collected on delivery (Cash, Zelle, Apple Pay only)
                   </span>
                 </label>
               </div>

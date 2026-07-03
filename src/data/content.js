@@ -32,10 +32,10 @@ export const business = {
 
 export const nav = {
   links: [
-    { to: "/",        label: "Home",       end: true },
-    { to: "/rentals", label: "Rent" },
-    { to: "/about",   label: "About & FAQ" },
-    { to: "/gallery", label: "Gallery" },
+    { to: "/",        label: "HOME",       end: true },
+    { to: "/rentals", label: "RENT" },
+    { to: "/about",   label: "ABOUT & FAQ" },
+    { to: "/gallery", label: "GALLERY" },
   ],
 };
 
@@ -77,11 +77,11 @@ export const rentalsPage = {
     description: "Browse our event rental packages and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
   },
   packagesSection: {
-    title:    "Packages",
+    title:    "PACKAGES",
     subtitle: "Save 10% when you book one of our packages.",
   },
   itemsSection: {
-    title:   "Tents, Chairs, Tables, and Inflatables",
+    title:   "TENTS, TABLES, CHAIRS, AND INFLATABLES",
   },
   reminder: {
     heading: "Packages include delivery and setup.",
@@ -96,8 +96,8 @@ export const about = {
     description:
       "Learn about Solimar Event Rentals and find answers to common questions about booking, delivery, payment, weather, and safety.",
   },
-  eyebrow: "About Us",
-  headline: "Event rentals for local families and events.",
+  eyebrow: "",
+  headline: "Event Rentals For Local Families and Events.",
   paragraphs: [
     "Solimar Event Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, inflatables, and other essentials for parties and events.",
     "We serve Naples, Bonita Springs, and Marco Island. We handle delivery, setup, and pickup so you don't have to worry about the equipment.",

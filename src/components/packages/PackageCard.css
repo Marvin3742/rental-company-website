@@ -14,7 +14,7 @@
 
 .package-card__media {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   background: var(--color-bg-soft);
   overflow: hidden;
 }
@@ -124,13 +124,17 @@
   align-self: stretch;
 }
 
-/* Featured variant for the rentals page — slightly bigger feel */
-.package-card--featured .package-card__media {
-  aspect-ratio: 16 / 10;
+/* Featured variant for the rentals page — compact text box so the image dominates */
+.package-card--featured .package-card__body {
+  gap: var(--space-3);
 }
 
 @media (min-width: 720px) {
   .package-card__body {
     padding: var(--space-7);
+  }
+
+  .package-card--featured .package-card__body {
+    padding: var(--space-5) var(--space-6);
   }
 }

@@ -1,5 +1,5 @@
 // GET  /api/admin/bookings?status=&from=&to=   → list bookings
-// PATCH /api/admin/bookings { id, action, ... }  → confirmTimes | cancel | recordBalance | complete
+// PATCH /api/admin/bookings { id, action, ... }  → confirmTimes | cancel | recordBalance | complete | saveNote
 import { withApi, HttpError } from "../../lib/server/http.js";
 import { prisma } from "../../lib/server/prisma.js";
 import { requireAdmin } from "../../lib/server/auth.js";
@@ -32,6 +32,7 @@ function serialize(b) {
     amountPaidCents: b.amountPaidCents,
     balanceDueCents: b.balanceDueCents,
     balanceCollectedMethod: b.balanceCollectedMethod,
+    adminNote: b.adminNote,
     lines: (b.lines ?? []).map((l) => ({
       name: l.product?.name ?? l.package?.name ?? l.lineType,
       quantity: l.quantity,
@@ -110,6 +111,16 @@ export default withApi({
         await prisma.booking.update({
           where: { id },
           data: { balanceDueCents: 0, balanceCollectedMethod: method || "other" },
+        });
+        break;
+      }
+
+      case "saveNote": {
+        const { note } = req.body;
+        const trimmed = typeof note === "string" ? note.trim() : "";
+        await prisma.booking.update({
+          where: { id },
+          data: { adminNote: trimmed || null },
         });
         break;
       }

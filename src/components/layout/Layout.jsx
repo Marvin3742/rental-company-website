@@ -2,7 +2,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import MobileCallBar from "./MobileCallBar";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -21,7 +20,6 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
-      <MobileCallBar />
     </>
   );
 }

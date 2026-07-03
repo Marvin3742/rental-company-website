@@ -57,5 +57,9 @@ export const listBlackouts = () => req("blackouts");
 export const createBlackout = (body) => req("blackouts", { method: "POST", body: JSON.stringify(body) });
 export const deleteBlackout = (id) => req("blackouts", { method: "DELETE", body: JSON.stringify({ id }) });
 
+/** Per-day inventory state for the calendar. from/to are "YYYY-MM-DD". */
+export const getInventoryAvailability = (from, to) =>
+  req(`availability?from=${from}&to=${to}`);
+
 export const getAdminSettings = () => req("settings");
 export const patchSettings = (body) => req("settings", { method: "PATCH", body: JSON.stringify(body) });

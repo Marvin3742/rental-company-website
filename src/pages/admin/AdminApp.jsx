@@ -49,22 +49,24 @@ export default function AdminApp() {
 
   return (
     <div className="admin">
-      <header className="admin__header">
+      <aside className="admin__sidebar">
         <div className="admin__brand">
-          Solimar <span>Admin</span>
+          <img src="/images/Solimar.webp" alt="Solimar" className="admin__logo" />
         </div>
-        <nav className="admin__tabs">
+
+        <nav className="admin__nav">
           {TABS.map((t) => (
             <button
               key={t.id}
               type="button"
-              className={`admin__tab ${tab === t.id ? "is-active" : ""}`}
+              className={`admin__nav-item ${tab === t.id ? "is-active" : ""}`}
               onClick={() => setTab(t.id)}
             >
               {t.label}
             </button>
           ))}
         </nav>
+
         <div className="admin__account">
           <span className="admin__email">{email}</span>
           <button
@@ -79,7 +81,7 @@ export default function AdminApp() {
             Log out
           </button>
         </div>
-      </header>
+      </aside>
 
       <main className="admin__main">
         <ActivePanel />

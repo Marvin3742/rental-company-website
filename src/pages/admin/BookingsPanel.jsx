@@ -1,8 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
 import { listBookings, patchBooking } from "../../lib/admin";
 import { formatCents } from "../../lib/format";
-import { formatDateLong } from "../../lib/availability";
+import { formatDateLong, toISODate } from "../../lib/availability";
 import { business } from "../../data/content";
+
+/** "YYYY-MM-DD" → local Date at midnight (matches how the checkout picker works). */
+const isoToLocalDate = (iso) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+};
 
 const STATUSES = ["", "PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "EXPIRED"];
 
@@ -31,8 +39,23 @@ export default function BookingsPanel() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(undefined); // calendar day filter
 
   const searchingRef = Boolean(ref.trim());
+
+  // Dates that have at least one booking, for highlighting on the calendar.
+  const bookedDates = useMemo(
+    () =>
+      [...new Set(bookings.map((b) => b.eventDate).filter(Boolean))].map(
+        isoToLocalDate
+      ),
+    [bookings]
+  );
+
+  const selectedISO = selectedDay ? toISODate(selectedDay) : "";
+  const visibleBookings = selectedISO
+    ? bookings.filter((b) => b.eventDate === selectedISO)
+    : bookings;
 
   const load = useCallback(() => {
     setLoading(true);
@@ -113,14 +136,54 @@ export default function BookingsPanel() {
         </div>
       </div>
 
-      {loading && <p className="admin-muted">Loading…</p>}
-      {error && <p className="admin-error">{error}</p>}
-      {!loading && !error && bookings.length === 0 && <p className="admin-muted">No bookings.</p>}
+      <div className="admin-bookings-layout">
+        <div className="admin-bookings-main">
+          {loading && <p className="admin-muted">Loading…</p>}
+          {error && <p className="admin-error">{error}</p>}
+          {!loading && !error && bookings.length === 0 && (
+            <p className="admin-muted">No bookings.</p>
+          )}
+          {!loading && !error && bookings.length > 0 && visibleBookings.length === 0 && (
+            <p className="admin-muted">No bookings on {formatDateLong(selectedISO)}.</p>
+          )}
 
-      <div className="admin-bookings">
-        {bookings.map((b) => (
-          <BookingCard key={b.id} booking={b} onUpdated={replace} />
-        ))}
+          <div className="admin-bookings">
+            {visibleBookings.map((b) => (
+              <BookingCard key={b.id} booking={b} onUpdated={replace} />
+            ))}
+          </div>
+        </div>
+
+        <aside className="admin-cal">
+          <h3 className="admin-cal__title">Calendar</h3>
+          <DayPicker
+            mode="single"
+            selected={selectedDay}
+            onSelect={setSelectedDay}
+            modifiers={{ booked: bookedDates }}
+            modifiersClassNames={{ booked: "admin-cal__booked" }}
+            weekStartsOn={0}
+          />
+          {selectedISO ? (
+            <div className="admin-cal__selected">
+              <span>
+                Showing {formatDateLong(selectedISO)}
+              </span>
+              <button
+                type="button"
+                className="admin-btn admin-btn--ghost"
+                onClick={() => setSelectedDay(undefined)}
+              >
+                Show all dates
+              </button>
+            </div>
+          ) : (
+            <p className="admin-cal__legend">
+              <span className="admin-cal__legend-swatch" aria-hidden="true" />
+              Dates with bookings
+            </p>
+          )}
+        </aside>
       </div>
     </section>
   );
@@ -135,6 +198,10 @@ function BookingCard({ booking: b, onUpdated }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [note, setNote] = useState(b.adminNote || "");
+  const [noteSaved, setNoteSaved] = useState(false);
+
+  const noteDirty = note.trim() !== (b.adminNote || "");
 
   const copyRef = async () => {
     try {
@@ -153,6 +220,21 @@ function BookingCard({ booking: b, onUpdated }) {
       const updated = await patchBooking({ id: b.id, ...body });
       onUpdated(updated);
       setEditingTimes(false);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const saveNote = async () => {
+    setBusy(true);
+    setErr(null);
+    try {
+      const updated = await patchBooking({ id: b.id, action: "saveNote", note });
+      onUpdated(updated);
+      setNoteSaved(true);
+      setTimeout(() => setNoteSaved(false), 1400);
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -223,6 +305,24 @@ function BookingCard({ booking: b, onUpdated }) {
               <> · paid in full{b.balanceCollectedMethod ? ` (${b.balanceCollectedMethod})` : ""}</>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="admin-booking__note">
+        <label htmlFor={`note-${b.id}`}>Internal note</label>
+        <textarea
+          id={`note-${b.id}`}
+          className="admin-booking__note-input"
+          rows={2}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder=""
+        />
+        <div className="admin-booking__note-actions">
+          <button type="button" className="admin-btn" disabled={busy || !noteDirty} onClick={saveNote}>
+            {noteDirty ? "Save note" : "Saved"}
+          </button>
+          {noteSaved && <span className="admin-chip">saved</span>}
         </div>
       </div>
 

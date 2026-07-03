@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
-import SectionHeading from "../components/ui/SectionHeading";
 import PackageCard from "../components/packages/PackageCard";
 import InventoryCard from "../components/inventory/InventoryCard";
 import { fetchProducts, fetchPackages } from "../lib/catalog";
@@ -50,13 +49,13 @@ export default function RentalsPage() {
 
       {/* Packages */}
       <section className="rentals-packages">
+        <h2 className="rentals-banner">{rentalsPageContent.packagesSection.title}</h2>
         <Container>
-          <SectionHeading
-            eyebrow={rentalsPageContent.packagesSection.eyebrow}
-            title={rentalsPageContent.packagesSection.title}
-            subtitle={rentalsPageContent.packagesSection.subtitle}
-            align="center"
-          />
+          {rentalsPageContent.packagesSection.subtitle && (
+            <p className="rentals-packages__subtitle">
+              {rentalsPageContent.packagesSection.subtitle}
+            </p>
+          )}
           <div className="rentals-packages__grid">
             {(packages ?? []).map((p) => (
               <PackageCard key={p.slug} pkg={p} featured />

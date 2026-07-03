@@ -29,7 +29,6 @@ export default function Header() {
       <Container className="site-header__inner">
         <Link to="/" className="site-header__brand" aria-label={`${business.name} home`}>
           <img src="/images/Solimar.webp" alt="" className="site-header__logo" />
-          <span className="site-header__brand-name">{business.name}</span>
         </Link>
 
         <nav

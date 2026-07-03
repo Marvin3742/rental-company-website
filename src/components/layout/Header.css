@@ -1,7 +1,7 @@
 .site-header {
   position: relative;
   z-index: 50;
-  background: var(--color-bg);
+  background:  #fff5e6; /*var(--color-bg);*/
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -54,7 +54,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  min-height: 72px;
+  min-height: 120px;
 }
 
 .site-header__brand {
@@ -70,7 +70,7 @@
 }
 
 .site-header__logo {
-  height: 70px;
+  height: 100px;
   width: auto;
   display: block;
 }
@@ -92,7 +92,7 @@
 
 .site-header__nav-link {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 800;
   color: var(--color-text);
   text-decoration: none;
   padding: var(--space-2) var(--space-1);

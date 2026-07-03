@@ -1,7 +1,6 @@
 import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
-import BookButton from "../components/ui/BookButton";
 import GalleryGrid from "../components/gallery/GalleryGrid";
 import { gallery, galleryPage as galleryPageContent } from "../data/content";
 import "./GalleryPage.css";
@@ -26,7 +25,6 @@ export default function GalleryPage() {
 
           <div className="gallery-page__cta">
             <p>{galleryPageContent.cta}</p>
-            <BookButton size="lg" />
           </div>
         </Container>
       </section>

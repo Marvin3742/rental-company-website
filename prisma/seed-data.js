@@ -109,7 +109,7 @@ export const inventory = [
     unit: "each",
     image: "/images/inventory/table.webp",
     images: ["/images/inventory/table.webp"],
-    description: "Rectangular 8ft folding table, seats up to 8 guests.",
+    description: "Rectangular 8ft folding table, seats 8-10 guests.",
     details: ["Seats 8", "96in x 30in", "Linens add-on available"],
   },
   {
@@ -119,12 +119,12 @@ export const inventory = [
     unit: "each",
     image: "/images/inventory/table.webp",
     images: ["/images/inventory/table.webp"],
-    description: "Rectangular 6ft folding table, seats up to 6 guests.",
+    description: "Rectangular 6ft folding table, seats 6-8 guests.",
     details: ["Seats 6", "72in x 30in", "Linens add-on available"],
   },
   {
     id: "chair",
-    name: "Plastic Folding Chair",
+    name: "Plastic Folding Chairs",
     price: 2.75,
     unit: "each",
     image: "/images/inventory/chair.webp",

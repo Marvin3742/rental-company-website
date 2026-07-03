@@ -33,6 +33,11 @@ export default function Footer() {
                   <span aria-hidden="true"></span> Follow us on Facebook
                 </a>
               </li>
+              <li>
+                <a href={"https://www.linkedin.com/in/marvin3742/"} target="_blank" rel="noreferrer">
+                  <span aria-hidden="true"></span> Built by Marvin Guerrero-Rangel
+                </a>
+              </li>
             </ul>
           </div>
 

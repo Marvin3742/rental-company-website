@@ -23,21 +23,33 @@ export default function AdminLogin({ onLoggedIn }) {
 
   return (
     <div className="admin-login">
-      <form className="admin-login__card" onSubmit={submit}>
-        <h1 className="admin-login__title">Solimar Admin</h1>
-        <label className="admin-login__field">
-          <span>Email</span>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
-        </label>
-        <label className="admin-login__field">
-          <span>Password</span>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </label>
-        {error && <p className="admin-login__error">{error}</p>}
-        <button type="submit" className="admin-btn admin-btn--primary" disabled={busy}>
-          {busy ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
+      <div className="admin-login__inner">
+        <img src="/images/Solimar.webp" alt="Solimar" className="admin-login__logo" />
+        <form className="admin-login__card" onSubmit={submit}>
+          <div className="admin-login__head">
+            <h1 className="admin-login__title">Admin sign in</h1>
+            <p className="admin-login__subtitle">
+              Manage bookings, inventory &amp; packages
+            </p>
+          </div>
+          <label className="admin-login__field">
+            <span>Email</span>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
+          </label>
+          <label className="admin-login__field">
+            <span>Password</span>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+          {error && <p className="admin-login__error">{error}</p>}
+          <button
+            type="submit"
+            className="admin-btn admin-btn--primary admin-login__submit"
+            disabled={busy}
+          >
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

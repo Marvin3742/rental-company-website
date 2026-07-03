@@ -1,4 +1,6 @@
 .admin {
+  display: flex;
+  align-items: stretch;
   min-height: 100vh;
   background: var(--color-bg);
 }
@@ -10,62 +12,167 @@
   color: var(--color-muted);
 }
 
-/* Header */
-.admin__header {
+/* Sidebar (dashboard nav) */
+.admin__sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  width: 248px;
+  flex-shrink: 0;
   display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  flex-wrap: wrap;
-  padding: var(--space-3) var(--space-5);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4);
+  background: #07226c;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .admin__brand {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 18px;
-}
-.admin__brand span {
-  color: var(--color-accent);
-}
-
-.admin__tabs {
   display: flex;
-  gap: var(--space-1);
-  flex-wrap: wrap;
+  justify-content: center;
+  padding: var(--space-2) var(--space-2) var(--space-4);
+}
+.admin__logo {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  display: block;
 }
 
-.admin__tab {
-  border: none;
-  background: none;
-  padding: var(--space-2) var(--space-3);
-  font: inherit;
-  color: var(--color-text-light);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
+.admin__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* Bleed the nav to the sidebar edges so highlights span the full width */
+  margin: 0 calc(var(--space-4) * -1);
 }
-.admin__tab.is-active {
-  color: var(--color-accent-deep);
-  border-bottom-color: var(--color-accent);
+
+.admin__nav-item {
+  border: none;
+  border-left: 3px solid transparent;
+  background: none;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font: inherit;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+.admin__nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+.admin__nav-item.is-active {
+  background: rgba(255, 255, 255, 0.14);
+  border-left-color: #fff;
+  color: #fff;
   font-weight: 600;
 }
 
 .admin__account {
-  margin-left: auto;
+  margin-top: auto;
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 .admin__email {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  word-break: break-all;
+}
+.admin__logout {
+  font: inherit;
   font-size: 0.85rem;
-  color: var(--color-muted);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-base);
+}
+.admin__logout:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .admin__main {
+  flex: 1;
+  min-width: 0;
   padding: var(--space-6) var(--space-5);
   max-width: 1100px;
-  margin: 0 auto;
+}
+
+/* Mobile: sidebar becomes a top bar — logo + logout on one row, nav a scrollable
+   tab strip below it. */
+@media (max-width: 860px) {
+  .admin {
+    flex-direction: column;
+  }
+  .admin__sidebar {
+    position: static;
+    height: auto;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+  .admin__brand {
+    padding: 0;
+    justify-content: flex-start;
+    margin-right: auto; /* push the account to the far right of the row */
+  }
+  .admin__logo {
+    max-width: 120px;
+  }
+
+  .admin__account {
+    margin-top: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    padding-top: 0;
+    border-top: none;
+  }
+  .admin__email {
+    display: none; /* long email eats the bar; drop it on mobile */
+  }
+
+  /* Nav on its own full-width row, horizontally scrollable (no wrap) */
+  .admin__nav {
+    order: 3;
+    flex-basis: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--space-1);
+    margin: 0 calc(var(--space-4) * -1);
+    padding: 0 var(--space-4);
+    scrollbar-width: none; /* Firefox */
+  }
+  .admin__nav::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+  .admin__nav-item {
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-left: none;
+    border-radius: var(--radius-pill);
+    padding: var(--space-2) var(--space-3);
+  }
+  .admin__nav-item.is-active {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .admin__main {
+    padding: var(--space-5) var(--space-4);
+  }
 }
 
 /* Login */
@@ -73,20 +180,47 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
-  background: var(--color-bg);
+  padding: var(--space-5);
+  background: linear-gradient(160deg, #07226c 0%, #0a2f8a 100%);
+}
+.admin-login__inner {
+  width: min(400px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+.admin-login__logo {
+  width: 180px;
+  max-width: 60vw;
+  height: auto;
+  display: block;
 }
 .admin-login__card {
-  width: min(360px, 90vw);
+  width: 100%;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
+.admin-login__head {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
 .admin-login__title {
   font-family: var(--font-heading);
-  margin: 0 0 var(--space-2);
+  font-size: 1.5rem;
+  margin: 0;
+}
+.admin-login__subtitle {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0;
 }
 .admin-login__field {
   display: flex;
@@ -99,13 +233,26 @@
 }
 .admin-login__field input {
   font: inherit;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3);
   border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.admin-login__field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 .admin-login__error {
   color: #a3261f;
   margin: 0;
   font-size: 0.9rem;
+}
+.admin-login__submit {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 600;
 }
 
 /* Buttons */
@@ -170,6 +317,190 @@
 .admin-error {
   color: #a3261f;
   font-size: 0.9rem;
+}
+
+/* Bookings + calendar layout */
+.admin-bookings-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+.admin-bookings-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-cal {
+  position: sticky;
+  top: var(--space-6);
+  flex-shrink: 0;
+  width: 400px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  font-size: 1rem;
+  /* Bigger day cells + match the site's blue accent for the picker */
+  --rdp-day-width: 48px;
+  --rdp-day-height: 48px;
+  --rdp-accent-color: var(--color-accent);
+  --rdp-accent-background-color: var(--color-accent-soft);
+  --rdp-today-color: var(--color-accent-deep);
+}
+.admin-cal__title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0 0 var(--space-3);
+}
+.admin-cal .rdp-root {
+  margin: 0 auto;
+}
+/* Highlight days that have bookings — square, not circular */
+.admin-cal__booked:not(.rdp-selected) .rdp-day_button {
+  font-weight: 700;
+  color: var(--color-accent-deep);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-sm);
+}
+.admin-cal .rdp-selected .rdp-day_button {
+  border-radius: var(--radius-sm);
+}
+.admin-cal__selected {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: 0.85rem;
+}
+.admin-cal__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.admin-cal__legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent);
+}
+
+@media (max-width: 900px) {
+  .admin-bookings-layout {
+    flex-direction: column;
+  }
+  .admin-cal {
+    position: static;
+    width: 100%;
+    order: -1;
+  }
+}
+
+/* Shrink the day cells so the bigger calendar still fits small phones */
+@media (max-width: 480px) {
+  .admin-cal {
+    padding: var(--space-4);
+    --rdp-day-width: 40px;
+    --rdp-day-height: 40px;
+  }
+}
+
+/* Inventory availability calendar */
+.admin-invcal {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin: var(--space-4) 0 var(--space-6);
+}
+.admin-invcal__cal {
+  position: static; /* override .admin-cal sticky */
+  flex-shrink: 0;
+}
+.admin-invcal__detail {
+  flex: 1;
+  min-width: 280px;
+}
+.admin-invcal__title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0 0 var(--space-2);
+}
+.admin-invcal__meta {
+  margin: 0 0 var(--space-3);
+  font-size: 0.85rem;
+}
+.admin-invcal__table th:nth-child(n + 2),
+.admin-invcal__table td:nth-child(n + 2) {
+  text-align: right;
+  width: 90px;
+}
+@media (max-width: 520px) {
+  .admin-invcal__table th:nth-child(n + 2),
+  .admin-invcal__table td:nth-child(n + 2) {
+    width: auto;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+}
+.admin-invcal__row--full td,
+.admin-invcal__row--full td.admin-muted {
+  color: #a3261f;
+  font-weight: 600;
+}
+
+/* Day tints: amber = some committed, red = an item sold out / day blocked */
+.admin-invcal__partial:not(.rdp-selected) .rdp-day_button {
+  background: #fdf3da;
+  color: #8a5a00;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+.admin-invcal__full:not(.rdp-selected) .rdp-day_button {
+  background: #fdeceb;
+  color: #a3261f;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+}
+
+.admin-invcal__legend {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.admin-invcal__legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.admin-invcal__swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.admin-invcal__swatch--partial {
+  background: #fdf3da;
+  border: 1px solid #e6c675;
+}
+.admin-invcal__swatch--full {
+  background: #fdeceb;
+  border: 1px solid #e3b7b4;
+}
+
+@media (max-width: 700px) {
+  .admin-invcal__cal {
+    width: 100%;
+  }
 }
 
 /* Booking cards */
@@ -260,6 +591,39 @@
   font-size: 0.85rem;
   margin-top: var(--space-2);
 }
+.admin-booking__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--color-border);
+}
+.admin-booking__note > label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+.admin-booking__note-input {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  width: 100%;
+}
+.admin-booking__note-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+.admin-booking__note-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .admin-booking__actions {
   display: flex;
   flex-wrap: wrap;
@@ -635,5 +999,141 @@
 @media (max-width: 700px) {
   .admin-additem__grid {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────────────── */
+
+/* Wide tables scroll horizontally instead of breaking the page layout */
+.admin-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: var(--space-3);
+}
+.admin-table-scroll .admin-table {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  /* Keep wide-table columns legible; the wrapper scrolls */
+  .admin-table-scroll .admin-table {
+    min-width: 680px;
+  }
+
+  /* Filter / search bar stacks full-width */
+  .admin-panel__bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-panel__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+  .admin-panel__controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+  }
+  .admin-panel__controls select,
+  .admin-panel__controls input {
+    width: 100%;
+  }
+
+  /* Blackout form stacks full-width */
+  .admin-blackout-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-blackout-form label,
+  .admin-blackout-form input,
+  .admin-blackout-form select {
+    width: 100%;
+  }
+
+  /* Tighter booking cards + settings inputs go full-width */
+  .admin-booking {
+    padding: var(--space-4);
+  }
+  .admin-settings input {
+    max-width: none;
+  }
+}
+
+/* Add-item form collapses to a single column on phones */
+@media (max-width: 520px) {
+  .admin-additem__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Inventory table → one stacked card per item on phones */
+@media (max-width: 700px) {
+  .admin-inv-table,
+  .admin-inv-table tbody,
+  .admin-inv-table tr,
+  .admin-inv-table td {
+    display: block;
+    width: 100%;
+  }
+  .admin-inv-table thead {
+    display: none;
+  }
+  .admin-inv-table {
+    border: none;
+    background: none;
+  }
+  .admin-inv-table tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  .admin-inv-table td {
+    border: none;
+    padding: var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: 0.95rem;
+  }
+  .admin-inv-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    flex-shrink: 0;
+  }
+  /* Item name becomes the card header */
+  .admin-inv-table__name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding-bottom: var(--space-2) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+  }
+  .admin-inv-table__name::before {
+    content: none;
+  }
+  /* Photos + actions span the full card width */
+  .admin-inv-table td[data-label="Photos"],
+  .admin-inv-table td[data-label=""] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-inv-table td[data-label=""]::before {
+    display: none;
+  }
+  .admin-inv-table .admin-num {
+    width: 120px;
+  }
+  .admin-inv-table .admin-row-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .admin-inv-table .admin-row-actions .admin-btn {
+    flex: 1;
   }
 }

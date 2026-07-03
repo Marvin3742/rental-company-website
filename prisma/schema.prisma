@@ -140,6 +140,9 @@ model Booking {
   balanceDueCents        Int         @default(0)
   balanceCollectedMethod String? // e.g. "cash" | "zelle" | "card" (set in admin)
 
+  // Free-text note the owner can attach to a booking in the admin (internal only).
+  adminNote String?
+
   // Lifecycle + Stripe.
   holdExpiresAt       DateTime? // set while PENDING; nulled on CONFIRMED
   stripeSessionId     String?   @unique

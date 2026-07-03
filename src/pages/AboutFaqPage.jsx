@@ -1,7 +1,6 @@
 import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
 import SectionHeading from "../components/ui/SectionHeading";
-import BookButton from "../components/ui/BookButton";
 import Image from "../components/ui/Image";
 import FaqAccordion from "../components/faq/FaqAccordion";
 import { about, faqSection as faqSectionContent, business } from "../data/content";
@@ -28,7 +27,6 @@ export default function AboutFaqPage() {
               ))}
               <p className="about__mission">{about.mission}</p>
               <p className="about__closer">{about.closer}</p>
-              <BookButton size="lg" />
             </div>
 
             <div className="about__media">

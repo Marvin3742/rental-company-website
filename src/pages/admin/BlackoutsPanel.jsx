@@ -80,39 +80,41 @@ export default function BlackoutsPanel() {
         </button>
       </form>
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Reason</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length === 0 && (
+      <div className="admin-table-scroll">
+        <table className="admin-table">
+          <thead>
             <tr>
-              <td colSpan={5} className="admin-muted">
-                No blackout dates.
-              </td>
+              <th>Item</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Reason</th>
+              <th></th>
             </tr>
-          )}
-          {rows.map((r) => (
-            <tr key={r.id}>
-              <td>{r.productName}</td>
-              <td>{r.startDate}</td>
-              <td>{r.endDate}</td>
-              <td className="admin-muted">{r.reason || "—"}</td>
-              <td>
-                <button type="button" className="admin-btn admin-btn--danger" onClick={() => remove(r.id)}>
-                  Remove
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={5} className="admin-muted">
+                  No blackout dates.
+                </td>
+              </tr>
+            )}
+            {rows.map((r) => (
+              <tr key={r.id}>
+                <td>{r.productName}</td>
+                <td>{r.startDate}</td>
+                <td>{r.endDate}</td>
+                <td className="admin-muted">{r.reason || "—"}</td>
+                <td>
+                  <button type="button" className="admin-btn admin-btn--danger" onClick={() => remove(r.id)}>
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

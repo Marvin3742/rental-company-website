@@ -1,12 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
 import {
   listProducts,
   patchProduct,
   createProduct,
   deleteProduct,
   uploadInventoryImage,
+  getInventoryAvailability,
 } from "../../lib/admin";
 import { compressToWebp } from "../../lib/image";
+import { toISODate, formatDateLong } from "../../lib/availability";
+
+/** "YYYY-MM-DD" → local Date at midnight. */
+const isoToLocalDate = (iso) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+};
 
 export default function InventoryPanel() {
   const [products, setProducts] = useState([]);
@@ -29,12 +39,14 @@ export default function InventoryPanel() {
       </p>
       {error && <p className="admin-error">{error}</p>}
 
+      <InventoryCalendar />
+
       <AddItemForm onCreated={(p) => setProducts((list) => [p, ...list])} />
 
       {loading ? (
         <p className="admin-muted">Loading…</p>
       ) : (
-        <table className="admin-table">
+        <table className="admin-table admin-inv-table">
           <thead>
             <tr>
               <th>Item</th>
@@ -58,6 +70,129 @@ export default function InventoryPanel() {
         </table>
       )}
     </section>
+  );
+}
+
+// Calendar that shows, for a chosen day, how much of each item is committed
+// (active reservations incl. the turnaround buffer) vs. available. Days are tinted:
+// amber = some inventory committed, red = an item is sold out or the day is blocked.
+function InventoryCalendar() {
+  const [month, setMonth] = useState(() => new Date());
+  const [selectedDay, setSelectedDay] = useState(() => new Date());
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch the visible month, padded a week each side so adjacent-month cells tint too.
+    const first = new Date(month.getFullYear(), month.getMonth(), 1);
+    const last = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+    const from = toISODate(new Date(first.getFullYear(), first.getMonth(), first.getDate() - 7));
+    const to = toISODate(new Date(last.getFullYear(), last.getMonth(), last.getDate() + 7));
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    getInventoryAvailability(from, to)
+      .then((d) => !cancelled && setData(d))
+      .catch((e) => !cancelled && setError(e.message))
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [month]);
+
+  const { fullDates, partialDates } = useMemo(() => {
+    const full = [];
+    const partial = [];
+    for (const [iso, day] of Object.entries(data?.days ?? {})) {
+      const soldOut = day.globalBlackout || day.items.some((it) => it.available === 0);
+      if (soldOut) full.push(isoToLocalDate(iso));
+      else if (day.items.length > 0 || day.atCap) partial.push(isoToLocalDate(iso));
+    }
+    return { fullDates: full, partialDates: partial };
+  }, [data]);
+
+  const dayKey = selectedDay ? toISODate(selectedDay) : "";
+  const dayData = data?.days?.[dayKey];
+  const products = data?.products ?? [];
+
+  // Full per-item breakdown for the selected day (every product, constrained or not).
+  const rows = products.map((p) => {
+    const hit = dayData?.items.find((it) => it.slug === p.slug);
+    const blackedOut = hit?.blackedOut ?? dayData?.globalBlackout ?? false;
+    const reserved = hit?.reserved ?? 0;
+    return {
+      ...p,
+      reserved,
+      blackedOut,
+      available: blackedOut ? 0 : p.totalStock - reserved,
+    };
+  });
+
+  return (
+    <div className="admin-invcal">
+      <div className="admin-invcal__cal admin-cal">
+        <DayPicker
+          mode="single"
+          month={month}
+          onMonthChange={setMonth}
+          selected={selectedDay}
+          onSelect={(d) => d && setSelectedDay(d)}
+          modifiers={{ invFull: fullDates, invPartial: partialDates }}
+          modifiersClassNames={{ invFull: "admin-invcal__full", invPartial: "admin-invcal__partial" }}
+          weekStartsOn={0}
+        />
+        <ul className="admin-invcal__legend">
+          <li>
+            <span className="admin-invcal__swatch admin-invcal__swatch--partial" /> Some committed
+          </li>
+          <li>
+            <span className="admin-invcal__swatch admin-invcal__swatch--full" /> Item sold out / blocked
+          </li>
+        </ul>
+      </div>
+
+      <div className="admin-invcal__detail">
+        <h3 className="admin-invcal__title">
+          {selectedDay ? formatDateLong(dayKey) : "Pick a day"}
+        </h3>
+        {error && <p className="admin-error">{error}</p>}
+        {loading && <p className="admin-muted">Loading…</p>}
+        {!loading && !error && (
+          <>
+            <p className="admin-muted admin-invcal__meta">
+              Deliveries: {dayData?.bookings ?? 0} / {data?.maxBookingsPerDay ?? "—"}
+              {dayData?.atCap ? " · at capacity" : ""}
+              {dayData?.globalBlackout ? " · day blocked" : ""}
+            </p>
+            {products.length === 0 ? (
+              <p className="admin-muted">No active inventory.</p>
+            ) : (
+              <table className="admin-table admin-invcal__table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Committed</th>
+                    <th>Available</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.slug} className={r.available === 0 ? "admin-invcal__row--full" : ""}>
+                      <td>{r.name}</td>
+                      <td>{r.reserved}</td>
+                      <td>{r.blackedOut ? "blocked" : r.available}</td>
+                      <td className="admin-muted">{r.totalStock}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -267,21 +402,21 @@ function ProductRow({ product, onRemoved }) {
 
   return (
     <tr>
-      <td>{product.name}</td>
-      <td>
+      <td data-label="Item" className="admin-inv-table__name">{product.name}</td>
+      <td data-label="Photos">
         <ImageManager value={images} nameHint={product.slug || product.name} onChange={saveImages} />
       </td>
-      <td className="admin-muted">/{product.unit.toLowerCase()}</td>
-      <td>
+      <td data-label="Unit" className="admin-muted">/{product.unit.toLowerCase()}</td>
+      <td data-label="Price ($)">
         <input className="admin-num" type="number" min="0" step="0.01" value={price} onChange={(e) => { setPrice(e.target.value); setSaved(false); }} />
       </td>
-      <td>
+      <td data-label="Stock">
         <input className="admin-num" type="number" min="0" step="1" value={stock} onChange={(e) => { setStock(e.target.value); setSaved(false); }} />
       </td>
-      <td>
+      <td data-label="Active">
         <input type="checkbox" checked={active} onChange={(e) => { setActive(e.target.checked); setSaved(false); }} />
       </td>
-      <td>
+      <td data-label="">
         <div className="admin-row-actions">
           <button type="button" className="admin-btn admin-btn--primary" disabled={!dirty || busy} onClick={save}>
             {busy ? "Saving…" : saved ? "Saved" : "Save"}
