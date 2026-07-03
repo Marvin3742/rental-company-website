@@ -142,7 +142,7 @@ export default function CheckoutPage() {
       <section className="checkout-page">
         <Container narrow>
           <SeoHead title="Checkout" path="/checkout" />
-          <h1 className="checkout-page__title">Checkout</h1>
+          <h1 className="checkout-page__title">Checkout </h1>
           <p className="checkout-page__empty">
             Your cart is empty. <Link to="/rentals">Browse rentals</Link> to get started.
           </p>
@@ -220,7 +220,7 @@ export default function CheckoutPage() {
     <section className="checkout-page">
       <Container>
         <SeoHead title="Checkout" description="Book your event rentals online." path="/checkout" />
-        <h1 className="checkout-page__title">Checkout</h1>
+        <h1 className="checkout-page__title">Checkout (DO NOT PLACE ORDER! ONLINE BOOKING STILL IN DEVELOPMENT)</h1>
 
         <form className="checkout-grid" onSubmit={handleSubmit}>
           <div className="checkout-main">

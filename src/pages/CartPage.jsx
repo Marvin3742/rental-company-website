@@ -17,7 +17,7 @@ export default function CartPage() {
     <section className="cart-page">
       <Container narrow>
         <SeoHead title="Cart" description="Review your event rental cart." path="/cart" />
-        <h1 className="cart-page__title">Your cart</h1>
+        <h1 className="cart-page__title">Your cart (DO NOT PLACE ORDER! ONLINE BOOKING STILL IN DEVELOPMENT)</h1>
 
         {items.length === 0 ? (
           <div className="cart-page__empty">
