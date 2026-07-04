@@ -13,7 +13,7 @@ const isoToLocalDate = (iso) => {
   return new Date(y, m - 1, d);
 };
 
-const STATUSES = ["", "PENDING", "CONFIRMED", "COMPLETED", "CANCELLED", "EXPIRED"];
+const STATUSES = ["", "PENDING", "UPCOMING", "COMPLETED", "CANCELLED", "EXPIRED"];
 
 // "HH:MM" (24h) → "H:MM AM/PM".
 const fmtTime = (t) => {
@@ -385,7 +385,7 @@ function BookingCard({ booking: b, onUpdated }) {
           </div>
         )}
 
-        {b.status === "CONFIRMED" && (
+        {b.status === "UPCOMING" && (
           <button type="button" className="admin-btn" disabled={busy} onClick={() => act({ action: "complete" })}>
             Mark completed
           </button>

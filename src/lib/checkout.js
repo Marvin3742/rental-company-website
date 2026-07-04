@@ -40,7 +40,7 @@ export async function fetchDeliveryQuote(parts) {
   return data;
 }
 
-/** Booking status (for the success page to poll until CONFIRMED). */
+/** Booking status (for the success page to poll until UPCOMING). */
 export async function fetchBooking(id) {
   const res = await fetch(`/api/bookings/${encodeURIComponent(id)}`);
   if (!res.ok) throw new Error("Could not load booking");

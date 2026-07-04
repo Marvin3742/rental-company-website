@@ -31,7 +31,7 @@ const blankForm = () => ({
   tax: "0",
   amountPaid: "0",
   paymentMethod: "cash",
-  status: "CONFIRMED",
+  status: "UPCOMING",
   statusTouched: false,
   adminNote: "",
 });
@@ -70,7 +70,7 @@ export default function ManualBookingForm({ onCreated }) {
     setForm((s) =>
       s.statusTouched
         ? { ...s, eventDate }
-        : { ...s, eventDate, status: eventDate < todayISO() ? "COMPLETED" : "CONFIRMED" }
+        : { ...s, eventDate, status: eventDate < todayISO() ? "COMPLETED" : "UPCOMING" }
     );
   };
   const onStatusChange = (e) => setForm((s) => ({ ...s, status: e.target.value, statusTouched: true }));
@@ -265,7 +265,7 @@ export default function ManualBookingForm({ onCreated }) {
         <label>
           Status
           <select value={form.status} onChange={onStatusChange}>
-            <option value="CONFIRMED">Confirmed</option>
+            <option value="UPCOMING">Upcoming</option>
             <option value="COMPLETED">Completed</option>
           </select>
         </label>

@@ -24,7 +24,7 @@ enum ProductUnit {
 
 enum BookingStatus {
   PENDING
-  CONFIRMED
+  UPCOMING
   CANCELLED
   EXPIRED
   COMPLETED
@@ -151,7 +151,7 @@ model Booking {
   adminNote String?
 
   // Lifecycle + Stripe.
-  holdExpiresAt       DateTime? // set while PENDING; nulled on CONFIRMED
+  holdExpiresAt       DateTime? // set while PENDING; nulled once UPCOMING
   stripeSessionId     String?   @unique
   stripePaymentIntent String?
   confirmedAt         DateTime?

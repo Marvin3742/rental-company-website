@@ -15,7 +15,7 @@ export default function BookingSuccessPage() {
   const [booking, setBooking] = useState(null);
   const [state, setState] = useState(bookingId ? "polling" : "missing");
 
-  // Trust the webhook, not just the redirect: poll until the booking is CONFIRMED.
+  // Trust the webhook, not just the redirect: poll until the booking is UPCOMING.
   useEffect(() => {
     if (!bookingId) return;
     let active = true;
@@ -27,7 +27,7 @@ export default function BookingSuccessPage() {
         const b = await fetchBooking(bookingId);
         if (!active) return;
         setBooking(b);
-        if (b.status === "CONFIRMED") {
+        if (b.status === "UPCOMING") {
           setState("confirmed");
           useCart.getState().clear();
           return;

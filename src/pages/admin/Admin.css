@@ -660,7 +660,7 @@
   white-space: nowrap;
 }
 .admin-status--pending { background: #fdf3da; color: #8a5a00; }
-.admin-status--confirmed { background: #e6f5ee; color: #1b7a52; }
+.admin-status--upcoming { background: #e6f5ee; color: #1b7a52; }
 .admin-status--completed { background: #e7edf6; color: #1e3a8a; }
 .admin-status--cancelled { background: #fdeceb; color: #a3261f; }
 .admin-status--expired { background: #eee; color: #666; }

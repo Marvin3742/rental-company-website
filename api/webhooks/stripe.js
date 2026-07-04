@@ -54,7 +54,7 @@ async function confirmBooking(session) {
   if (!bookingId) return;
 
   const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
-  if (!booking || booking.status === "CONFIRMED") return; // not found or already done (idempotent)
+  if (!booking || booking.status === "UPCOMING") return; // not found or already done (idempotent)
 
   const amountPaid = session.amount_total ?? 0;
   const taxCents = session.total_details?.amount_tax ?? 0;
@@ -65,7 +65,7 @@ async function confirmBooking(session) {
     prisma.booking.update({
       where: { id: bookingId },
       data: {
-        status: "CONFIRMED",
+        status: "UPCOMING",
         confirmedAt: new Date(),
         holdExpiresAt: null,
         amountPaidCents: amountPaid,
