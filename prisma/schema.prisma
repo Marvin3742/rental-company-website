@@ -35,6 +35,11 @@ enum PaymentMode {
   DEPOSIT
 }
 
+enum BookingSource {
+  WEB // placed through storefront checkout (Stripe)
+  MANUAL // recorded by the admin outside checkout (e.g. Facebook Marketplace, backfilled history)
+}
+
 enum ReservationStatus {
   HELD
   CONFIRMED
@@ -107,6 +112,7 @@ model PackageItem {
 model Booking {
   id     String        @id @default(cuid())
   status BookingStatus @default(PENDING)
+  source BookingSource @default(WEB)
 
   // Scheduling (single-day; times are customer PREFERENCES, confirmed by phone).
   eventDate          DateTime @db.Date
@@ -138,7 +144,8 @@ model Booking {
   paymentMode            PaymentMode
   amountPaidCents        Int         @default(0)
   balanceDueCents        Int         @default(0)
-  balanceCollectedMethod String? // e.g. "cash" | "zelle" | "card" (set in admin)
+  balanceCollectedMethod String? // e.g. "cash" | "zelle" | "card" (set in admin, later balance collection)
+  paymentMethod          String? // how the initial amountPaidCents was collected on a MANUAL booking; null for WEB (paid via Stripe)
 
   // Free-text note the owner can attach to a booking in the admin (internal only).
   adminNote String?
@@ -157,6 +164,7 @@ model Booking {
   @@index([eventDate, status])
   @@index([status, holdExpiresAt])
   @@index([deliveryCity])
+  @@index([source])
 }
 
 /// Line items, flattened to Products (packages exploded into PACKAGE_COMPONENT rows

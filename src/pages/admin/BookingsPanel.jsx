@@ -5,6 +5,7 @@ import { listBookings, patchBooking } from "../../lib/admin";
 import { formatCents } from "../../lib/format";
 import { formatDateLong, toISODate } from "../../lib/availability";
 import { business } from "../../data/content";
+import ManualBookingForm from "./ManualBookingForm";
 
 /** "YYYY-MM-DD" → local Date at midnight (matches how the checkout picker works). */
 const isoToLocalDate = (iso) => {
@@ -75,8 +76,12 @@ export default function BookingsPanel() {
   const replace = (updated) =>
     setBookings((list) => list.map((b) => (b.id === updated.id ? updated : b)));
 
+  const addManual = (created) => setBookings((list) => [created, ...list]);
+
   return (
     <section className="admin-panel">
+      <ManualBookingForm onCreated={addManual} />
+
       <div className="admin-panel__bar">
         <h2 className="admin-panel__title">Bookings</h2>
         <div className="admin-panel__controls">
@@ -266,7 +271,10 @@ function BookingCard({ booking: b, onUpdated }) {
             </button>
           </div>
         </div>
-        <span className={`admin-status admin-status--${b.status.toLowerCase()}`}>{b.status}</span>
+        <div className="admin-booking__badges">
+          {b.source === "MANUAL" && <span className="admin-chip admin-chip--manual">Manual</span>}
+          <span className={`admin-status admin-status--${b.status.toLowerCase()}`}>{b.status}</span>
+        </div>
       </div>
 
       <div className="admin-booking__grid">
@@ -293,9 +301,12 @@ function BookingCard({ booking: b, onUpdated }) {
           <h4>Payment</h4>
           <div className="admin-booking__pay">
             {b.paymentMode === "DEPOSIT" ? "Deposit" : "Full"} · total {formatCents(b.totalCents)}
-            {b.taxCents ? ` (+${formatCents(b.taxCents)} tax)` : ""}
+            {/* Web bookings: totalCents excludes tax (tax is bolted on by the Stripe webhook).
+                Manual bookings: tax is folded into totalCents up front — don't double-count it. */}
+            {b.source === "WEB" && b.taxCents ? ` (+${formatCents(b.taxCents)} tax)` : ""}
             <br />
             Paid {formatCents(b.amountPaidCents)}
+            {b.paymentMethod ? ` (${b.paymentMethod})` : ""}
             {b.balanceDueCents > 0 ? (
               <>
                 {" · "}

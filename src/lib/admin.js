@@ -10,6 +10,7 @@ async function req(path, options = {}) {
   if (!res.ok) {
     const err = new Error(data.error || `Request failed (${res.status})`);
     err.status = res.status;
+    err.body = data; // e.g. { shortfalls, blackout, atCap } on a 409 conflict
     throw err;
   }
   return data;
@@ -25,6 +26,7 @@ export const listBookings = (params = {}) => {
   return req(`bookings${qs ? `?${qs}` : ""}`);
 };
 export const patchBooking = (body) => req("bookings", { method: "PATCH", body: JSON.stringify(body) });
+export const createManualBooking = (body) => req("bookings", { method: "POST", body: JSON.stringify(body) });
 
 export const listProducts = () => req("products");
 export const patchProduct = (body) => req("products", { method: "PATCH", body: JSON.stringify(body) });

@@ -23,7 +23,7 @@ export const business = {
   email: "SolimarEventRentals88@gmail.com",
   Facebook: "https://www.facebook.com/profile.php?id=61590500376097",
   serviceAreas: ["Naples", "Bonita Springs", "Marco Island"],
-  hours: "Mon–Sat, 8am–7pm",
+  hours: "Mon–Sun, 8am–7pm",
   city: "Naples, FL",
 };
 
@@ -118,9 +118,9 @@ export const galleryPage = {
   seo: {
     description: "A look at real parties and events we've set up across Naples, Bonita Springs, and Marco Island.",
   },
-  eyebrow: "Past events",
+  eyebrow: "",
   title:   "Gallery",
-  cta:     "See something you'd love for your party?",
+  cta:     "",
 };
 
 

@@ -50,7 +50,13 @@
   background: #fff;
 }
 
+/* Break out of the Container's centered max-width so the logo lines up with
+   the hero title's left edge on wide screens (and stays put across every
+   page), instead of the left edge of a centered 1180px box. */
 .site-header__inner {
+  max-width: none;
+  margin: 0;
+  padding-left: var(--hero-x-inset);
   display: flex;
   align-items: center;
   gap: var(--space-4);

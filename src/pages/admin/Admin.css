@@ -676,6 +676,17 @@
   background: #fdf3da;
   color: #8a5a00;
 }
+.admin-chip--manual {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+.admin-booking__badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 
 /* Tables */
 .admin-table {
@@ -1000,6 +1011,43 @@
   .admin-additem__grid {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* Manual booking form */
+.admin-manual textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  resize: vertical;
+}
+.admin-manual__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+.admin-manual__head .admin-additem__title {
+  margin: 0;
+}
+.admin-manual__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+.admin-manual__summary {
+  font-size: 0.85rem;
+  margin: var(--space-3) 0;
+}
+.admin-manual__conflict {
+  margin-bottom: var(--space-3);
+}
+.admin-manual__conflict ul {
+  margin: var(--space-2) 0;
+  padding-left: 1.2em;
 }
 
 /* ── Mobile ─────────────────────────────────────────────────────────────── */

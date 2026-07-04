@@ -5,6 +5,9 @@
   min-height: 560px;
   display: flex;
   align-items: center;
+  /* If the centered content would be taller than the viewport, clamp to the
+     top instead of overflowing upward into the header/logo. */
+  align-items: safe center;
   overflow: hidden;
   color: #fff;
 }
@@ -28,17 +31,33 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  padding-top: var(--space-8);
+  display: flex;
+  justify-content: flex-start;
+  /* Clears the ~120px floating header (and its logo) regardless of viewport height. */
+  padding-top: max(var(--space-8), 140px);
   padding-bottom: var(--space-8);
 }
 
+/* Hero is full-bleed: opt out of the site Container's centered max-width so
+   the content hugs the actual left edge of the screen on wide viewports,
+   instead of the left edge of a centered 1180px box. */
+.hero .hero__inner {
+  max-width: none;
+  margin: 0;
+  padding-left: var(--hero-x-inset);
+}
+
 .hero__content {
-  max-width: 720px;
+  /* Roughly half the screen on desktop, pushed to the left; falls back to
+     full-width below. */
+  width: 48%;
+  min-width: 360px;
+  max-width: 660px;
 }
 
 .hero__eyebrow {
   display: inline-block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -48,7 +67,7 @@
 }
 
 .hero__title {
-  font-size: clamp(4.2rem, 9.5vw, 7rem);
+  font-size: clamp(4.4rem, 9vw, 8.5rem);
   font-weight: 700;
   line-height: 1.02;
   margin: 0 0 var(--space-5);
@@ -77,13 +96,13 @@
 }
 
 .hero__subtitle {
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
   color: #fff;
-  opacity: 0.95;
-  max-width: 560px;
+  opacity: 0.99;
   margin: 0 0 var(--space-6);
   line-height: 1.5;
   text-shadow: 0 1px 12px rgba(28, 58, 64, 0.3);
+  font-weight: 500;
 }
 
 .hero__actions {
@@ -104,6 +123,16 @@
   background: #fff;
   color: var(--color-text);
   border-color: #fff;
+}
+
+/* Below this width the "left third" column would be too cramped for the
+   bigger type, so let the hero content take the full width instead. */
+@media (max-width: 900px) {
+  .hero__content {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
 }
 
 @keyframes hero-fade {
