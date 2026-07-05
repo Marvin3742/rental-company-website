@@ -18,6 +18,11 @@ const isoToLocalDate = (iso) => {
   return new Date(y, m - 1, d);
 };
 
+const CATEGORY_OPTIONS = [
+  { value: "TENTS_TABLES_CHAIRS", label: "Tents, Tables & Chairs" },
+  { value: "INFLATABLES", label: "Inflatables" },
+];
+
 export default function InventoryPanel() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,6 +56,9 @@ export default function InventoryPanel() {
             <tr>
               <th>Item</th>
               <th>Photos</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Order</th>
               <th>Unit</th>
               <th>Price ($)</th>
               <th>Stock</th>
@@ -267,7 +275,16 @@ function ImageManager({ value = [], onChange, nameHint }) {
   );
 }
 
-const BLANK = { name: "", price: "", unit: "each", stock: "1", images: [], description: "" };
+const BLANK = {
+  name: "",
+  price: "",
+  unit: "each",
+  stock: "1",
+  images: [],
+  description: "",
+  category: "TENTS_TABLES_CHAIRS",
+  sortOrder: "0",
+};
 
 function AddItemForm({ onCreated }) {
   const [f, setF] = useState(BLANK);
@@ -287,6 +304,8 @@ function AddItemForm({ onCreated }) {
         totalStock: parseInt(f.stock, 10),
         description: f.description,
         images: f.images,
+        category: f.category,
+        sortOrder: parseInt(f.sortOrder, 10) || 0,
       });
       onCreated(created);
       setF(BLANK);
@@ -320,6 +339,20 @@ function AddItemForm({ onCreated }) {
           Stock
           <input type="number" min="0" step="1" value={f.stock} onChange={set("stock")} required />
         </label>
+        <label>
+          Category
+          <select value={f.category} onChange={set("category")}>
+            {CATEGORY_OPTIONS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Order
+          <input type="number" step="1" value={f.sortOrder} onChange={set("sortOrder")} />
+        </label>
         <div className="admin-additem__wide admin-additem__field">
           <span>Photos (optional)</span>
           <ImageManager
@@ -346,6 +379,9 @@ function ProductRow({ product, onRemoved }) {
   const [stock, setStock] = useState(String(product.totalStock));
   const [active, setActive] = useState(product.active);
   const [images, setImages] = useState(product.images ?? []);
+  const [description, setDescription] = useState(product.description ?? "");
+  const [category, setCategory] = useState(product.category);
+  const [sortOrder, setSortOrder] = useState(String(product.sortOrder));
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [err, setErr] = useState(null);
@@ -379,7 +415,10 @@ function ProductRow({ product, onRemoved }) {
   const dirty =
     price !== (product.priceCents / 100).toFixed(2) ||
     stock !== String(product.totalStock) ||
-    active !== product.active;
+    active !== product.active ||
+    description !== (product.description ?? "") ||
+    category !== product.category ||
+    sortOrder !== String(product.sortOrder);
 
   const save = async () => {
     setBusy(true);
@@ -391,6 +430,9 @@ function ProductRow({ product, onRemoved }) {
         totalStock: parseInt(stock, 10),
         priceCents: Math.round(parseFloat(price) * 100),
         active,
+        description,
+        category,
+        sortOrder: parseInt(sortOrder, 10) || 0,
       });
       setSaved(true);
     } catch (e) {
@@ -405,6 +447,32 @@ function ProductRow({ product, onRemoved }) {
       <td data-label="Item" className="admin-inv-table__name">{product.name}</td>
       <td data-label="Photos">
         <ImageManager value={images} nameHint={product.slug || product.name} onChange={saveImages} />
+      </td>
+      <td data-label="Description">
+        <textarea
+          className="admin-inv-table__description"
+          rows={2}
+          value={description}
+          onChange={(e) => { setDescription(e.target.value); setSaved(false); }}
+        />
+      </td>
+      <td data-label="Category">
+        <select value={category} onChange={(e) => { setCategory(e.target.value); setSaved(false); }}>
+          {CATEGORY_OPTIONS.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.label}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td data-label="Order">
+        <input
+          className="admin-num"
+          type="number"
+          step="1"
+          value={sortOrder}
+          onChange={(e) => { setSortOrder(e.target.value); setSaved(false); }}
+        />
       </td>
       <td data-label="Unit" className="admin-muted">/{product.unit.toLowerCase()}</td>
       <td data-label="Price ($)">

@@ -7,7 +7,7 @@ export default withApi({
   async GET() {
     const products = await prisma.product.findMany({
       where: { active: true },
-      orderBy: [{ priceCents: "desc" }, { name: "asc" }],
+      orderBy: [{ category: "asc" }, { sortOrder: "asc" }, { name: "asc" }],
     });
     return products.map((p) => ({
       slug: p.slug,
@@ -17,6 +17,7 @@ export default withApi({
       images: p.images ?? [],
       description: p.description,
       details: p.details ?? [],
+      category: p.category,
     }));
   },
 });

@@ -4,6 +4,7 @@
 import { getStripe } from "../../lib/server/stripe.js";
 import { prisma } from "../../lib/server/prisma.js";
 import { sendBookingEmails } from "../../lib/server/email.js";
+import { releaseDiscountCode } from "../../lib/server/discounts.js";
 
 // Vercel: do not parse the body, so we can verify the Stripe signature.
 export const config = { api: { bodyParser: false } };
@@ -100,14 +101,15 @@ async function expireBooking(session) {
   const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
   if (!booking || booking.status !== "PENDING") return;
 
-  await prisma.$transaction([
-    prisma.booking.update({
+  await prisma.$transaction(async (tx) => {
+    await tx.booking.update({
       where: { id: bookingId },
       data: { status: "EXPIRED", holdExpiresAt: null },
-    }),
-    prisma.reservation.updateMany({
+    });
+    await tx.reservation.updateMany({
       where: { bookingId },
       data: { status: "RELEASED", expiresAt: null },
-    }),
-  ]);
+    });
+    await releaseDiscountCode(bookingId, tx);
+  });
 }

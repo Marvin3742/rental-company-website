@@ -680,6 +680,43 @@
   background: #ede9fe;
   color: #5b21b6;
 }
+
+.admin-discount-created {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-accent-soft);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-5);
+  font-size: 0.9rem;
+}
+.admin-discount-created__code {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.admin-discount-created__code code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: #fff;
+  border: 1px solid var(--color-border-strong);
+  padding: 3px 8px;
+  color: var(--color-accent-deep);
+}
+.admin-discount-created__action {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-accent-deep);
+}
 .admin-booking__badges {
   display: flex;
   align-items: center;
@@ -714,6 +751,15 @@
   font: inherit;
   padding: 4px 6px;
   border: 1px solid var(--color-border-strong);
+}
+.admin-inv-table__description {
+  width: 220px;
+  min-width: 160px;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  border: 1px solid var(--color-border-strong);
+  resize: vertical;
 }
 .admin-row-actions {
   display: inline-flex;

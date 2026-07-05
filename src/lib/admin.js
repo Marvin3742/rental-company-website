@@ -59,6 +59,10 @@ export const listBlackouts = () => req("blackouts");
 export const createBlackout = (body) => req("blackouts", { method: "POST", body: JSON.stringify(body) });
 export const deleteBlackout = (id) => req("blackouts", { method: "DELETE", body: JSON.stringify({ id }) });
 
+export const listDiscounts = () => req("discounts");
+export const createDiscount = (body) => req("discounts", { method: "POST", body: JSON.stringify(body) });
+export const deleteDiscount = (id) => req("discounts", { method: "DELETE", body: JSON.stringify({ id }) });
+
 /** Per-day inventory state for the calendar. from/to are "YYYY-MM-DD". */
 export const getInventoryAvailability = (from, to) =>
   req(`availability?from=${from}&to=${to}`);

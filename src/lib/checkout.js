@@ -40,6 +40,22 @@ export async function fetchDeliveryQuote(parts) {
   return data;
 }
 
+/** Preview a discount code without redeeming it. */
+export async function fetchDiscountQuote({ code, subtotalCents, deliveryFeeCents }) {
+  const res = await fetch("/api/discount-quote", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ code, subtotalCents, deliveryFeeCents }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data.error || "Could not check that code");
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
 /** Booking status (for the success page to poll until UPCOMING). */
 export async function fetchBooking(id) {
   const res = await fetch(`/api/bookings/${encodeURIComponent(id)}`);

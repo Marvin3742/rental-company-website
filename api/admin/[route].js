@@ -5,6 +5,7 @@
 import availability from "../../lib/server/admin/availability.js";
 import blackouts from "../../lib/server/admin/blackouts.js";
 import bookings from "../../lib/server/admin/bookings.js";
+import discounts from "../../lib/server/admin/discounts.js";
 import login from "../../lib/server/admin/login.js";
 import logout from "../../lib/server/admin/logout.js";
 import me from "../../lib/server/admin/me.js";
@@ -12,7 +13,7 @@ import packages from "../../lib/server/admin/packages.js";
 import products from "../../lib/server/admin/products.js";
 import settings from "../../lib/server/admin/settings.js";
 
-const routes = { availability, blackouts, bookings, login, logout, me, packages, products, settings };
+const routes = { availability, blackouts, bookings, discounts, login, logout, me, packages, products, settings };
 
 export default async function handler(req, res) {
   const fn = routes[req.query.route];

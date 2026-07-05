@@ -13,9 +13,10 @@ export default async function handler(req, res) {
   const now = new Date();
   const expired = await prisma.booking.findMany({
     where: { status: "PENDING", holdExpiresAt: { lt: now } },
-    select: { id: true },
+    select: { id: true, discountCodeId: true },
   });
   const ids = expired.map((b) => b.id);
+  const discountCodeIds = expired.map((b) => b.discountCodeId).filter(Boolean);
 
   if (ids.length > 0) {
     await prisma.$transaction([
@@ -27,6 +28,10 @@ export default async function handler(req, res) {
         where: { id: { in: ids } },
         data: { status: "EXPIRED", holdExpiresAt: null },
       }),
+      // Release any discount codes claimed by these abandoned holds.
+      ...(discountCodeIds.length > 0
+        ? [prisma.discountCode.updateMany({ where: { id: { in: discountCodeIds } }, data: { usedAt: null } })]
+        : []),
     ]);
   }
 

@@ -277,6 +277,53 @@
   font-weight: 600;
 }
 
+.checkout-summary__discount {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.checkout-summary__discount-form {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.checkout-summary__discount-form input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  text-transform: uppercase;
+}
+
+.checkout-summary__discount-apply {
+  font: inherit;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.checkout-summary__discount-apply:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkout-summary__discount-remove {
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .checkout-summary__error {
   font-size: 0.85rem;
   color: #a3261f;

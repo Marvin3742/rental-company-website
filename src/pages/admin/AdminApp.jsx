@@ -5,6 +5,7 @@ import BookingsPanel from "./BookingsPanel";
 import InventoryPanel from "./InventoryPanel";
 import PackagesPanel from "./PackagesPanel";
 import BlackoutsPanel from "./BlackoutsPanel";
+import DiscountsPanel from "./DiscountsPanel";
 import SettingsPanel from "./SettingsPanel";
 import "./Admin.css";
 
@@ -13,6 +14,7 @@ const TABS = [
   { id: "inventory", label: "Inventory", Panel: InventoryPanel },
   { id: "packages", label: "Packages", Panel: PackagesPanel },
   { id: "blackouts", label: "Blackout dates", Panel: BlackoutsPanel },
+  { id: "discounts", label: "Discounts", Panel: DiscountsPanel },
   { id: "settings", label: "Settings", Panel: SettingsPanel },
 ];
 

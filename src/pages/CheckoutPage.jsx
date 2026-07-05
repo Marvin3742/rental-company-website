@@ -8,7 +8,7 @@ import Button from "../components/ui/Button";
 import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
-import { startCheckout, fetchSettings, fetchDeliveryQuote } from "../lib/checkout";
+import { startCheckout, fetchSettings, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
 import { business } from "../data/content";
 import "./CheckoutPage.css";
 
@@ -50,6 +50,10 @@ export default function CheckoutPage() {
   const [submitError, setSubmitError] = useState(null);
   const [quote, setQuote] = useState(null);
   const [quoteStatus, setQuoteStatus] = useState("idle"); // idle | loading | loaded | error
+  const [discountInput, setDiscountInput] = useState("");
+  const [discount, setDiscount] = useState(null); // { code, discountCents, kind, value }
+  const [discountStatus, setDiscountStatus] = useState("idle"); // idle | loading | applied | error
+  const [discountError, setDiscountError] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -153,10 +157,42 @@ export default function CheckoutPage() {
 
   const deliverable = quoteStatus === "loaded" && quote?.serviceable;
   const deliveryFeeCents = deliverable ? quote.feeCents : 0;
-  const totalCents = subtotal + deliveryFeeCents;
+  const discountCents = discount?.discountCents ?? 0;
+  const totalCents = Math.max(0, subtotal + deliveryFeeCents - discountCents);
   const depositCents = Math.round((totalCents * (settings.depositPct ?? 30)) / 100);
   const payNowCents = paymentMode === "DEPOSIT" ? depositCents : totalCents;
   const balanceCents = totalCents - payNowCents;
+
+  const applyDiscount = async () => {
+    const code = discountInput.trim();
+    if (!code) return;
+    setDiscountStatus("loading");
+    setDiscountError(null);
+    try {
+      const result = await fetchDiscountQuote({ code, subtotalCents: subtotal, deliveryFeeCents });
+      if (result.valid) {
+        setDiscount({ code, discountCents: result.discountCents, kind: result.kind, value: result.value });
+        setDiscountStatus("applied");
+      } else {
+        setDiscount(null);
+        setDiscountStatus("error");
+        setDiscountError(
+          result.reason === "already_used" ? "That code has already been used." : "That code isn't valid."
+        );
+      }
+    } catch (err) {
+      setDiscount(null);
+      setDiscountStatus("error");
+      setDiscountError(err.message || "Couldn't check that code.");
+    }
+  };
+
+  const clearDiscount = () => {
+    setDiscount(null);
+    setDiscountStatus("idle");
+    setDiscountError(null);
+    setDiscountInput("");
+  };
 
   const dateOk = availStatus === "loaded" && avail?.bookable;
   const zipOk = /^\d{5}$/.test(form.zip);
@@ -196,10 +232,16 @@ export default function CheckoutPage() {
           pickupSameDay: form.pickupSameDay,
         },
         paymentMode,
+        discountCode: discountStatus === "applied" ? discount?.code : undefined,
       });
       window.location.href = url; // redirect to Stripe Checkout
     } catch (err) {
-      if (err.status === 409) {
+      if (err.status === 409 && !err.shortfalls?.length && discountStatus === "applied") {
+        // Someone else claimed the code between preview and submit — drop it
+        // so the customer isn't stuck retrying with a now-dead code.
+        clearDiscount();
+        setSubmitError(err.message);
+      } else if (err.status === 409) {
         setSubmitError(
           err.shortfalls?.length
             ? `No longer available for this date: ${err.shortfalls
@@ -468,6 +510,41 @@ export default function CheckoutPage() {
                 Couldn't check delivery for that address. Please verify it or call us.
               </p>
             )}
+
+            <div className="checkout-summary__discount">
+              {discountStatus === "applied" && discount ? (
+                <div className="checkout-summary__line">
+                  <span>Discount ({discount.code})</span>
+                  <span>
+                    −{formatCents(discountCents)}{" "}
+                    <button type="button" className="checkout-summary__discount-remove" onClick={clearDiscount}>
+                      remove
+                    </button>
+                  </span>
+                </div>
+              ) : (
+                <div className="checkout-summary__discount-form">
+                  <input
+                    type="text"
+                    value={discountInput}
+                    onChange={(e) => setDiscountInput(e.target.value.toUpperCase())}
+                    placeholder="Discount code"
+                    disabled={discountStatus === "loading"}
+                  />
+                  <button
+                    type="button"
+                    className="checkout-summary__discount-apply"
+                    onClick={applyDiscount}
+                    disabled={!discountInput.trim() || discountStatus === "loading"}
+                  >
+                    {discountStatus === "loading" ? "Checking…" : "Apply"}
+                  </button>
+                </div>
+              )}
+              {discountStatus === "error" && discountError && (
+                <p className="checkout-summary__error">{discountError}</p>
+              )}
+            </div>
 
             <div className="checkout-summary__row">
               <span>Due now</span>

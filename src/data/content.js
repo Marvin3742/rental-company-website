@@ -80,8 +80,11 @@ export const rentalsPage = {
     title:    "PACKAGES",
     subtitle: "Save 10% when you book one of our packages.",
   },
-  itemsSection: {
-    title:   "TENTS, TABLES, CHAIRS, AND INFLATABLES",
+  tentsSection: {
+    title:   "TENTS, TABLES, AND CHAIRS",
+  },
+  inflatablesSection: {
+    title:   "INFLATABLES",
   },
   reminder: {
     heading: "Packages include delivery and setup.",
