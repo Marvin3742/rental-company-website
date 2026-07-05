@@ -7,7 +7,7 @@ export default withApi({
   async GET() {
     const packages = await prisma.package.findMany({
       where: { active: true },
-      orderBy: [{ priceCents: "desc" }, { name: "asc" }],
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     });
     return packages.map((p) => ({
       slug: p.slug,

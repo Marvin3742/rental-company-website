@@ -18,6 +18,7 @@ const BLANK = {
   tagline: "",
   active: true,
   items: [],
+  sortOrder: "0",
 };
 
 const formFromPkg = (pkg) => ({
@@ -29,6 +30,7 @@ const formFromPkg = (pkg) => ({
   tagline: pkg.tagline || "",
   active: pkg.active,
   items: (pkg.items || []).map((it) => ({ productId: it.productId, quantity: String(it.quantity) })),
+  sortOrder: String(pkg.sortOrder ?? 0),
 });
 
 const toPayload = (form) => ({
@@ -44,6 +46,7 @@ const toPayload = (form) => ({
   items: form.items
     .filter((it) => it.productId && Number(it.quantity) > 0)
     .map((it) => ({ productId: it.productId, quantity: parseInt(it.quantity, 10) })),
+  sortOrder: parseInt(form.sortOrder, 10) || 0,
 });
 
 export default function PackagesPanel() {
@@ -170,6 +173,10 @@ function PackageFields({ form, setForm, products }) {
         <label>
           Tagline (optional)
           <input value={form.tagline} onChange={set("tagline")} />
+        </label>
+        <label>
+          Order
+          <input type="number" step="1" value={form.sortOrder} onChange={set("sortOrder")} />
         </label>
       </div>
 
