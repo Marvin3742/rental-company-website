@@ -205,6 +205,7 @@ function BookingCard({ booking: b, onUpdated }) {
   const [copied, setCopied] = useState(false);
   const [note, setNote] = useState(b.adminNote || "");
   const [noteSaved, setNoteSaved] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const noteDirty = note.trim() !== (b.adminNote || "");
 
@@ -247,7 +248,22 @@ function BookingCard({ booking: b, onUpdated }) {
     }
   };
 
+  const sendConfirmation = async () => {
+    setBusy(true);
+    setErr(null);
+    try {
+      await patchBooking({ id: b.id, action: "sendConfirmation" });
+      setSent(true);
+      setTimeout(() => setSent(false), 2000);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const canCancel = !["CANCELLED", "COMPLETED", "EXPIRED"].includes(b.status);
+  const canEmail = ["UPCOMING", "COMPLETED"].includes(b.status);
 
   return (
     <article className="admin-booking">
@@ -383,6 +399,20 @@ function BookingCard({ booking: b, onUpdated }) {
               Record balance collected
             </button>
           </div>
+        )}
+
+        {canEmail && (
+          <button
+            type="button"
+            className="admin-btn"
+            disabled={busy}
+            title={`Email the booking confirmation to ${b.customerEmail}`}
+            onClick={() => {
+              if (confirm(`Email the booking confirmation to ${b.customerEmail}?`)) sendConfirmation();
+            }}
+          >
+            {sent ? "Sent ✓" : "Send confirmation email"}
+          </button>
         )}
 
         {b.status === "UPCOMING" && (
