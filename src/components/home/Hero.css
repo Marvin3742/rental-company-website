@@ -1,8 +1,9 @@
 .hero {
   position: relative;
-  /* Full viewport, with svh for mobile browser-chrome safety */
-  height: 100svh;
-  min-height: 560px;
+  /* Fill the viewport, but GROW past it when the content (big title + subtitle
+     + CTAs) is taller than a short laptop screen — otherwise the buttons spill
+     past a fixed height and get clipped, and the footer butts up against them. */
+  min-height: 100svh;
   display: flex;
   align-items: center;
   /* If the centered content would be taller than the viewport, clamp to the

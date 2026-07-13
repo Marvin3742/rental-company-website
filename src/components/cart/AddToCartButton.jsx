@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Button from "../ui/Button";
 import { useCart } from "../../store/cart";
+import { useToasts } from "../../store/toast";
 
 const CartIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -30,6 +31,7 @@ export default function AddToCartButton({
   className,
 }) {
   const addItem = useCart((s) => s.addItem);
+  const addToast = useToasts((s) => s.addToast);
   const [added, setAdded] = useState(false);
   const timer = useRef(null);
 
@@ -37,6 +39,13 @@ export default function AddToCartButton({
 
   const onClick = () => {
     addItem(entry, quantity);
+    addToast({
+      kind: entry.kind,
+      slug: entry.slug,
+      name: entry.name,
+      image: entry.image,
+      quantity,
+    });
     setAdded(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setAdded(false), 1400);
