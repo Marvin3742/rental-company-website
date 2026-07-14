@@ -6,6 +6,7 @@ import { parseEventDate } from "../lib/server/availability.js";
 import { createBookingHold } from "../lib/server/booking.js";
 import { getStripe } from "../lib/server/stripe.js";
 import { prisma } from "../lib/server/prisma.js";
+import { rateLimit, clientIp } from "../lib/server/rate-limit.js";
 
 const SITE_URL = process.env.VITE_SITE_URL || "http://localhost:5173";
 const TAX_ENABLED = process.env.STRIPE_TAX_ENABLED === "true";
@@ -62,6 +63,11 @@ function buildLineItems(hold) {
 
 export default withApi({
   async POST(req, res) {
+    // Every accepted request creates a 32-minute inventory hold (which also
+    // counts toward the daily booking cap), so unthrottled spam could lock up
+    // the calendar with fake holds. 15/10min is far above any real customer.
+    rateLimit(`checkout:${clientIp(req)}`, { max: 15, windowMs: 10 * 60 * 1000 });
+
     const { eventDate, lines, customer, paymentMode, discountCode } = req.body ?? {};
     const date = parseEventDate(eventDate);
 

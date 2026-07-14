@@ -37,6 +37,12 @@ export default withApi({
     if (!body || body.length === 0) throw new HttpError(400, "No image data received");
     if (body.length > MAX_BYTES) throw new HttpError(413, "Image is too large");
 
+    // Verify the bytes really are WebP ("RIFF"...."WEBP"), not just trust the
+    // client — the blob is served publicly under our name with this extension.
+    if (body.length < 12 || body.toString("ascii", 0, 4) !== "RIFF" || body.toString("ascii", 8, 12) !== "WEBP") {
+      throw new HttpError(400, "File is not a WebP image");
+    }
+
     const key = `inventory/${cleanName(req.query?.name)}.webp`;
     const { url } = await put(key, body, {
       access: "public",

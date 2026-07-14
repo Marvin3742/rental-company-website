@@ -38,9 +38,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    if (event.type === "checkout.session.completed") {
+    if (
+      event.type === "checkout.session.completed" ||
+      event.type === "checkout.session.async_payment_succeeded"
+    ) {
       await confirmBooking(event.data.object);
-    } else if (event.type === "checkout.session.expired") {
+    } else if (
+      event.type === "checkout.session.expired" ||
+      event.type === "checkout.session.async_payment_failed"
+    ) {
       await expireBooking(event.data.object);
     }
     return res.status(200).json({ received: true });
@@ -54,8 +60,18 @@ async function confirmBooking(session) {
   const bookingId = session.metadata?.bookingId || session.client_reference_id;
   if (!bookingId) return;
 
+  // Only confirm sessions Stripe says are actually paid. Async payment methods
+  // (ACH & co.) fire checkout.session.completed with payment_status "unpaid";
+  // the money arrives later via checkout.session.async_payment_succeeded.
+  if (session.payment_status !== "paid") return;
+
   const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
-  if (!booking || booking.status === "UPCOMING") return; // not found or already done (idempotent)
+  if (!booking) return;
+  // Idempotency + state guard: PENDING is the normal path; EXPIRED can still
+  // confirm (payment landed after the hold-release cron). Anything else —
+  // UPCOMING (already confirmed), COMPLETED, CANCELLED — must never be
+  // overwritten by a redelivered or late webhook event.
+  if (booking.status !== "PENDING" && booking.status !== "EXPIRED") return;
 
   const amountPaid = session.amount_total ?? 0;
   const taxCents = session.total_details?.amount_tax ?? 0;
