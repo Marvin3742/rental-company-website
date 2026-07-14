@@ -53,10 +53,17 @@ export default function BookingsPanel() {
     [bookings]
   );
 
+  // Newest bookings first (by when they were placed). The API already returns
+  // them in this order; sorting here keeps it true after manual adds / edits.
+  const sortedBookings = useMemo(
+    () => [...bookings].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    [bookings]
+  );
+
   const selectedISO = selectedDay ? toISODate(selectedDay) : "";
   const visibleBookings = selectedISO
-    ? bookings.filter((b) => b.eventDate === selectedISO)
-    : bookings;
+    ? sortedBookings.filter((b) => b.eventDate === selectedISO)
+    : sortedBookings;
 
   const load = useCallback(() => {
     setLoading(true);
@@ -83,7 +90,14 @@ export default function BookingsPanel() {
       <ManualBookingForm onCreated={addManual} />
 
       <div className="admin-panel__bar">
-        <h2 className="admin-panel__title">Bookings</h2>
+        <h2 className="admin-panel__title">
+          Bookings
+          {!loading && !error && (
+            <span className="admin-panel__count" title="Bookings shown">
+              {visibleBookings.length}
+            </span>
+          )}
+        </h2>
         <div className="admin-panel__controls">
           <label>
             Reference{" "}
