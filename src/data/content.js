@@ -100,7 +100,7 @@ export const about = {
       "Learn about Solimar Event Rentals and find answers to common questions about booking, delivery, payment, weather, and safety.",
   },
   eyebrow: "",
-  headline: "Event Rentals For Local Families and Events.",
+  headline: "Party Rentals For Local Families and Events.",
   paragraphs: [
     "Solimar Event Rentals is a family-owned business based in Naples, Florida. We provide tents, tables, chairs, inflatables, and other essentials for parties and events.",
     "We serve Naples, Bonita Springs, and Marco Island. We handle delivery, setup, and pickup so you don't have to worry about the equipment.",
@@ -154,35 +154,47 @@ export const faqCategories = [
 ];
 
 export const faqs = [
-  {
-    category: "Booking",
-    question:  "How do I book a rental?",
-    answer:    "Call or text us at 239-778-3742 to book — text is preferred. You can also book online: browse our rentals, add them to your cart, pick your date, and check out.",
-  },
-  {
-    category: "Delivery & Setup",
-    question:  "Is delivery included?",
-    answer:    "We deliver throughout Naples, Bonita Springs, and Marco Island. Small orders or addresses outside this area require a small delivery fee",
-  },
-  {
-    category: "Delivery & Setup",
-    question:  "How long does setup take?",
-    answer:    "Between 40-60 minutes",
-  },
-  {
-    category: "Payment",
-    question:  "What payment methods do you accept?",
-    answer:    "Cash, Zelle, Apple Pay, and major credit cards.",
-  },
-  {
+    {
     category: "Payment",
     question:  "Is a deposit required?",
-    answer:    "Yes",
+    answer:    "Yes. We require 15% of your order to be paid upfront to secure your date.",
   },
   {
     category: "Cancellation & Weather",
     question:  "What's your cancellation policy?",
-    answer:    "Cancellations more than 7 days before your event are refunded in full. Closer than that, we'll happily apply your deposit towards a future booking.",
+    answer:    "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations incur a 15% cancellation fee (the deposit).",
+  },
+  {
+    category: "Delivery & Setup",
+    question:  "Is delivery included?",
+    answer:    "We deliver throughout Collier and Lee County. The delivery fee is calculated based on your distance from us and can be as low as $0.00. ",
+  },
+  {
+    question: "What time do you guys drop-off/deliver?",
+    answer: "We will ask for your time preferences at checkout and then CALL you to confirm your actual delivery times."
+  },
+  {
+    question: "What is included with the waterslides?",
+    answer: "We provide a 150 ft extension cord and hose. Please make sure a power and water source is available within this distance before booking."
+  },
+  {
+    question: "Do tents come with any lighting options?",
+    answer: "Please call us about that."
+  },
+  {
+    category: "Delivery & Setup",
+    question:  "How long does setup take?",
+    answer:    "About 40 minutes for smaller orders and about 90 minutes for our biggest packages. We work to bring these times down after every delivery.",
+  },
+  {
+    category: "Payment",
+    question:  "What do you accept for in-person payments?",
+    answer:    "We prefer cash but also take credit cards, Zelle, and Apple Pay.",
+  },
+  {
+    category: "Booking",
+    question:  "How do I book a rental?",
+    answer:    "You can call or text us at 239-778-3742 to book — text is preferred. You can also book online.",
   },
 
 
