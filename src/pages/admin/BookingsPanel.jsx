@@ -53,11 +53,20 @@ export default function BookingsPanel() {
     [bookings]
   );
 
-  // Newest bookings first (by when they were placed). The API already returns
-  // them in this order; sorting here keeps it true after manual adds / edits.
+  // Sort by event date: the "Upcoming" status view shows soonest events first
+  // (ascending); every other view shows the most recent event date first
+  // (descending), with the most recently placed booking breaking ties. The API
+  // already returns this order; re-sorting here keeps it true after manual adds
+  // / in-place edits.
+  const upcomingView = status === "UPCOMING" && !searchingRef;
   const sortedBookings = useMemo(
-    () => [...bookings].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-    [bookings]
+    () =>
+      [...bookings].sort((a, b) => {
+        const byDate = a.eventDate.localeCompare(b.eventDate);
+        if (byDate !== 0) return upcomingView ? byDate : -byDate;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }),
+    [bookings, upcomingView]
   );
 
   const selectedISO = selectedDay ? toISODate(selectedDay) : "";
