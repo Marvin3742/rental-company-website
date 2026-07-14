@@ -201,6 +201,22 @@ export const faqs = [
 ];
 
 
+// ─── Checkout: "Read this before booking" reminder ────────────────────────────
+// Shown as a highlighted callout at the top of the checkout page. Edit the
+// title/intro and the bullet points below — they render in order.
+
+export const checkoutNotice = {
+  title: "Read this before booking",
+  intro: "A few important things to check so your delivery day goes smoothly:",
+  points: [
+    "Make sure you have enough clear, level space for everything you're renting. If you're unsure about sizes, measure your space or call us before booking.",
+    "Water slides & inflatables: we provide a 150 ft hose and extension cord. A water source and a power outlet must be within 150 ft of where the unit will be set up.",
+    "Please add anything important to the Delivery notes field below — especially the surface the rental will sit on (grass, concrete, turf, pavers, or dirt) and anything that affects access, like gates, stairs, slopes, or narrow walkways.",
+    "Deposit & cancellation: a 15% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the 15% deposit.",
+  ],
+};
+
+
 // ─── Gallery images ───────────────────────────────────────────────────────────
 // Drop images in /public/images/gallery/ then add an entry below.
 // Use descriptive alt text — it helps with SEO.

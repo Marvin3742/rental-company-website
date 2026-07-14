@@ -12,6 +12,55 @@
   color: var(--color-text-light);
 }
 
+/* "Read this before booking" callout — sits above the checkout form */
+.checkout-notice {
+  border: 1px solid var(--color-accent);
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin: 0 0 var(--space-6);
+}
+
+.checkout-notice__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  color: var(--color-accent-deep);
+}
+
+.checkout-notice__icon {
+  flex: none;
+}
+
+.checkout-notice__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--color-accent-deep);
+}
+
+.checkout-notice__intro {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.checkout-notice__list {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--color-text);
+}
+
+.checkout-notice__list li {
+  line-height: 1.5;
+}
+
 .checkout-grid {
   display: grid;
   grid-template-columns: 1fr;

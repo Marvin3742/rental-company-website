@@ -9,7 +9,7 @@ import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
 import { startCheckout, fetchSettings, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
-import { business } from "../data/content";
+import { business, checkoutNotice } from "../data/content";
 import "./CheckoutPage.css";
 
 const startOfToday = () => {
@@ -264,6 +264,37 @@ export default function CheckoutPage() {
         <SeoHead title="Checkout" description="Book your event rentals online." path="/checkout" />
         <h1 className="checkout-page__title">Checkout</h1>
 
+        <section className="checkout-notice" role="note" aria-labelledby="checkout-notice-title">
+          <div className="checkout-notice__head">
+            <svg
+              className="checkout-notice__icon"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 11.5v4.5" />
+              <path d="M12 7.75h.01" />
+            </svg>
+            <h2 id="checkout-notice-title" className="checkout-notice__title">
+              {checkoutNotice.title}
+            </h2>
+          </div>
+          {checkoutNotice.intro && <p className="checkout-notice__intro">{checkoutNotice.intro}</p>}
+          <ul className="checkout-notice__list">
+            {checkoutNotice.points.map((point, i) => (
+              <li key={i}>{point}</li>
+            ))}
+          </ul>
+        </section>
+
         <form className="checkout-grid" onSubmit={handleSubmit}>
           <div className="checkout-main">
             {/* Step 1 — date */}
@@ -449,7 +480,7 @@ export default function CheckoutPage() {
                   <span className="checkout-payopt__title">Pay {settings.depositPct}% deposit now</span>
                   <span className="checkout-payopt__amount">{formatCents(depositCents)}</span>
                   <span className="checkout-payopt__sub">
-                    {formatCents(totalCents - depositCents)} balance collected on delivery (Cash, Zelle, Apple Pay only)
+                    {formatCents(totalCents - depositCents)} balance collected on delivery
                   </span>
                 </label>
               </div>
