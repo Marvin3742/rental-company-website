@@ -2,8 +2,12 @@
   position: relative;
   /* Fill the viewport, but GROW past it when the content (big title + subtitle
      + CTAs) is taller than a short laptop screen — otherwise the buttons spill
-     past a fixed height and get clipped, and the footer butts up against them. */
-  min-height: 100svh;
+     past a fixed height and get clipped, and the footer butts up against them.
+     Use lvh (LARGEST viewport) not svh: on mobile, svh only covers the screen
+     while the address bar is showing, so once it collapsed the hero fell short
+     and the footer peeked up at the bottom. lvh always covers the screen. */
+  min-height: 100vh;  /* fallback for browsers without large-viewport units */
+  min-height: 100lvh;
   display: flex;
   align-items: center;
   /* If the centered content would be taller than the viewport, clamp to the
