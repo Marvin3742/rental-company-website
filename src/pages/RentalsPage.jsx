@@ -33,13 +33,25 @@ export default function RentalsPage() {
         path="/rentals"
       />
 
+      {/* Tents, tables & chairs */}
+      <section className="rentals-items" id="tents-tables-chairs">
+        <h1 className="rentals-banner">{rentalsPageContent.tentsSection.title}</h1>
+        <Container>
+          {error && <p className="rentals-items__status">Couldn’t load rentals. Please refresh.</p>}
+          {!error && items === null && <p className="rentals-items__status">Loading rentals…</p>}
+          <div className="rentals-items__list">
+            {items?.filter((item) => item.category === "TENTS_TABLES_CHAIRS").map((item) => (
+              <InventoryCard key={item.slug} item={item} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* Inflatables */}
       {(items === null || items.some((item) => item.category === "INFLATABLES")) && (
         <section className="rentals-items" id="inflatables">
           <h1 className="rentals-banner">{rentalsPageContent.inflatablesSection.title}</h1>
           <Container>
-            {error && <p className="rentals-items__status">Couldn’t load rentals. Please refresh.</p>}
-            {!error && items === null && <p className="rentals-items__status">Loading rentals…</p>}
             <div className="rentals-items__list">
               {items?.filter((item) => item.category === "INFLATABLES").map((item) => (
                 <InventoryCard key={item.slug} item={item} />
@@ -48,18 +60,6 @@ export default function RentalsPage() {
           </Container>
         </section>
       )}
-
-      {/* Tents, tables & chairs */}
-      <section className="rentals-items" id="tents-tables-chairs">
-        <h1 className="rentals-banner">{rentalsPageContent.tentsSection.title}</h1>
-        <Container>
-          <div className="rentals-items__list">
-            {items?.filter((item) => item.category === "TENTS_TABLES_CHAIRS").map((item) => (
-              <InventoryCard key={item.slug} item={item} />
-            ))}
-          </div>
-        </Container>
-      </section>
 
       {/* Packages */}
       <section className="rentals-packages">
