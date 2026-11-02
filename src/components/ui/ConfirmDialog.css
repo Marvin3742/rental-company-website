@@ -1,0 +1,62 @@
+.confirm-dialog {
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0; /* padding lives on the panel, so clicks on the dialog itself are backdrop clicks */
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.confirm-dialog::backdrop {
+  background: rgba(20, 32, 51, 0.55);
+}
+
+/* Browsers without <dialog> support don't hide it while closed. */
+.confirm-dialog:not([open]) {
+  display: none;
+}
+
+.confirm-dialog__panel {
+  padding: var(--space-5);
+}
+
+.confirm-dialog__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.confirm-dialog__body {
+  color: var(--color-text-light);
+  line-height: 1.55;
+}
+
+.confirm-dialog__body p {
+  margin: 0 0 var(--space-3);
+}
+
+.confirm-dialog__body p:last-child {
+  margin-bottom: 0;
+}
+
+.confirm-dialog__body strong {
+  color: var(--color-text);
+}
+
+/* Side by side on wider screens; stacked full-width on phones, confirm on top. */
+.confirm-dialog__actions {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 480px) {
+  .confirm-dialog__actions > .btn {
+    flex: 1 1 100%;
+  }
+}

@@ -5,6 +5,7 @@ import "react-day-picker/style.css";
 import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
@@ -50,6 +51,7 @@ export default function CheckoutPage() {
   const [avail, setAvail] = useState(null);
   const [availError, setAvailError] = useState(null);
   const [paymentMode, setPaymentMode] = useState("FULL");
+  const [confirmingReserve, setConfirmingReserve] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [quote, setQuote] = useState(null);
@@ -201,9 +203,16 @@ export default function CheckoutPage() {
     form.pickupEarliest;
   const canContinue = Boolean(selectedDate && dateOk && detailsOk && deliverable && !submitting);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!canContinue) return;
+    // A reservation books the date with nothing paid and no Stripe page to
+    // review first, so the customer confirms it in a dialog before it's placed.
+    if (paymentMode === "RESERVE") setConfirmingReserve(true);
+    else placeBooking();
+  };
+
+  const placeBooking = async () => {
     setSubmitting(true);
     setSubmitError(null);
     try {
@@ -229,12 +238,16 @@ export default function CheckoutPage() {
       });
       window.location.href = url; // Stripe Checkout, or straight to the success page for a reservation
     } catch (err) {
+      setConfirmingReserve(false); // the error shows on the page, under the summary
       if (err.status === 409 && !err.shortfalls?.length && discountStatus === "applied") {
         // Someone else claimed the code between preview and submit — drop it
         // so the customer isn't stuck retrying with a now-dead code.
         clearDiscount();
         setSubmitError(err.message);
       } else if (err.status === 409) {
+        // Re-check so the calendar feedback updates. This clears submitError,
+        // so it has to run before the message is set.
+        handleSelectDate(selectedDate);
         setSubmitError(
           err.shortfalls?.length
             ? `No longer available for this date: ${err.shortfalls
@@ -242,8 +255,6 @@ export default function CheckoutPage() {
                 .join(", ")}. Please pick another date or reduce quantities.`
             : err.message
         );
-        // Re-check so the calendar feedback updates.
-        handleSelectDate(selectedDate);
       } else {
         setSubmitError(err.message || "Something went wrong. Please try again.");
       }
@@ -609,6 +620,25 @@ export default function CheckoutPage() {
             </Link>
           </aside>
         </form>
+
+        <ConfirmDialog
+          open={confirmingReserve}
+          title="Confirm your reservation"
+          confirmLabel={submitting ? "Reserving…" : "Confirm reservation"}
+          busy={submitting}
+          onConfirm={placeBooking}
+          onCancel={() => setConfirmingReserve(false)}
+        >
+          <p>
+            You’re booking your rentals for{" "}
+            <strong>{selectedDate ? formatDateLong(toISODate(selectedDate)) : ""}</strong>, delivered to{" "}
+            {form.unit ? `${form.street}, ${form.unit}` : form.street}, {form.city}.
+          </p>
+          <p>
+            Nothing is charged now. <strong>{formatCents(totalCents)}</strong> is due on delivery, and we’ll call
+            you to confirm delivery and pickup times.
+          </p>
+        </ConfirmDialog>
       </Container>
     </section>
   );
