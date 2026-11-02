@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { listBookings, patchBooking } from "../../lib/admin";
+import { listBookings, patchBooking, deleteBooking } from "../../lib/admin";
 import { formatCents } from "../../lib/format";
 import { formatDateLong, toISODate } from "../../lib/availability";
 import { business } from "../../data/content";
@@ -94,6 +94,8 @@ export default function BookingsPanel() {
 
   const addManual = (created) => setBookings((list) => [created, ...list]);
 
+  const remove = (id) => setBookings((list) => list.filter((b) => b.id !== id));
+
   return (
     <section className="admin-panel">
       <ManualBookingForm onCreated={addManual} />
@@ -177,7 +179,7 @@ export default function BookingsPanel() {
 
           <div className="admin-bookings">
             {visibleBookings.map((b) => (
-              <BookingCard key={b.id} booking={b} onUpdated={replace} />
+              <BookingCard key={b.id} booking={b} onUpdated={replace} onDeleted={remove} />
             ))}
           </div>
         </div>
@@ -217,7 +219,7 @@ export default function BookingsPanel() {
   );
 }
 
-function BookingCard({ booking: b, onUpdated }) {
+function BookingCard({ booking: b, onUpdated, onDeleted }) {
   const [editingTimes, setEditingTimes] = useState(false);
   const [dropoff, setDropoff] = useState(b.dropoffLatestTime || "09:00");
   const [pickup, setPickup] = useState(b.pickupEarliestTime || "11:00");
@@ -278,6 +280,19 @@ function BookingCard({ booking: b, onUpdated }) {
       await patchBooking({ id: b.id, action: "sendConfirmation" });
       setSent(true);
       setTimeout(() => setSent(false), 2000);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const removeBooking = async () => {
+    setBusy(true);
+    setErr(null);
+    try {
+      await deleteBooking(b.id);
+      onDeleted(b.id);
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -455,6 +470,24 @@ function BookingCard({ booking: b, onUpdated }) {
             }}
           >
             Cancel
+          </button>
+        )}
+        {/* Only cancelled bookings can be deleted — cancel first, then delete. */}
+        {b.status === "CANCELLED" && (
+          <button
+            type="button"
+            className="admin-btn admin-btn--danger"
+            disabled={busy}
+            onClick={() => {
+              if (
+                confirm(
+                  `Permanently delete ${b.customerName}'s cancelled booking for ${formatDateLong(b.eventDate)}? This can't be undone.`
+                )
+              )
+                removeBooking();
+            }}
+          >
+            Delete
           </button>
         )}
       </div>

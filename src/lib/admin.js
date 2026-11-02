@@ -27,6 +27,7 @@ export const listBookings = (params = {}) => {
 };
 export const patchBooking = (body) => req("bookings", { method: "PATCH", body: JSON.stringify(body) });
 export const createManualBooking = (body) => req("bookings", { method: "POST", body: JSON.stringify(body) });
+export const deleteBooking = (id) => req("bookings", { method: "DELETE", body: JSON.stringify({ id }) });
 
 export const listProducts = () => req("products");
 export const patchProduct = (body) => req("products", { method: "PATCH", body: JSON.stringify(body) });
