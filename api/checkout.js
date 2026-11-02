@@ -1,12 +1,15 @@
 // POST /api/checkout
-// Body: { eventDate, lines:[{kind,slug,quantity}], customer:{...}, paymentMode:"FULL"|"DEPOSIT" }
+// Body: { eventDate, lines:[{kind,slug,quantity}], customer:{...}, paymentMode:"FULL"|"DEPOSIT"|"RESERVE" }
 // Creates an oversell-safe hold, then a Stripe Checkout Session. Returns { url, bookingId }.
+// RESERVE (offered while deposits are off) skips Stripe: the booking is confirmed
+// on the spot and `url` points straight at the success page.
 import { withApi } from "../lib/server/http.js";
 import { parseEventDate } from "../lib/server/availability.js";
 import { createBookingHold } from "../lib/server/booking.js";
 import { getStripe } from "../lib/server/stripe.js";
 import { prisma } from "../lib/server/prisma.js";
 import { rateLimit, clientIp } from "../lib/server/rate-limit.js";
+import { sendBookingEmails } from "../lib/server/email.js";
 
 const SITE_URL = process.env.VITE_SITE_URL || "http://localhost:5173";
 const TAX_ENABLED = process.env.STRIPE_TAX_ENABLED === "true";
@@ -69,6 +72,9 @@ export default withApi({
     rateLimit(`checkout:${clientIp(req)}`, { max: 15, windowMs: 10 * 60 * 1000 });
 
     const { eventDate, lines, customer, paymentMode, discountCode } = req.body ?? {};
+    // A reservation keeps its inventory until the owner cancels it (nothing paid,
+    // no expiry), so allow far fewer of those per IP than 32-minute holds.
+    if (paymentMode === "RESERVE") rateLimit(`reserve:${clientIp(req)}`, { max: 5, windowMs: 60 * 60 * 1000 });
     const date = parseEventDate(eventDate);
 
     let hold;
@@ -87,6 +93,22 @@ export default withApi({
     }
 
     const { booking } = hold;
+
+    // Reservation: already confirmed, nothing to collect online. Send the emails
+    // the Stripe webhook would have sent (best-effort) and skip Stripe entirely.
+    if (hold.paymentMode === "RESERVE") {
+      try {
+        const full = await prisma.booking.findUnique({
+          where: { id: booking.id },
+          include: { lines: { include: { product: true, package: true } } },
+        });
+        await sendBookingEmails(full);
+      } catch (err) {
+        console.error("[email] booking emails failed:", err);
+      }
+      return { url: `/booking/success?b=${booking.id}`, bookingId: booking.id };
+    }
+
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",

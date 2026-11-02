@@ -22,10 +22,16 @@ export function useSettings() {
 }
 
 /**
- * Fill the {depositPct} placeholder in site copy (see content.js) with the live
- * deposit %, so the copy can't drift from what checkout charges. Shows "…"
- * until the setting has loaded.
+ * Resolve deposit-dependent site copy (see content.js) against the live deposit %,
+ * so the copy can't drift from what checkout charges. `copy` is a string whose
+ * {depositPct} placeholders get filled in, or { deposit, noDeposit } — noDeposit
+ * is used while deposits are turned off (deposit % set to 0). Shows "…" until
+ * the setting has loaded.
  */
-export function withDepositPct(text, depositPct) {
-  return text.replaceAll("{depositPct}", depositPct == null ? "…" : String(depositPct));
+export function depositCopy(copy, depositPct) {
+  if (typeof copy !== "string") {
+    if (depositPct == null) return "…";
+    copy = depositPct > 0 ? copy.deposit : copy.noDeposit;
+  }
+  return copy.replaceAll("{depositPct}", depositPct == null ? "…" : String(depositPct));
 }

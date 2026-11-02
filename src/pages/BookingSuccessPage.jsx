@@ -75,7 +75,7 @@ export default function BookingSuccessPage() {
             <>
               <div className="booking-result__spinner" aria-hidden="true" />
               <h1 className="booking-result__title">Finalizing your booking</h1>
-              <p className="booking-result__lead">Hang tight while we confirm your payment.</p>
+              <p className="booking-result__lead">Hang tight while we confirm your booking.</p>
             </>
           )}
 

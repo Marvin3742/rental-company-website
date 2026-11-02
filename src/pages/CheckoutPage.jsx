@@ -9,7 +9,7 @@ import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
 import { startCheckout, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
-import { useSettings, withDepositPct } from "../lib/settings";
+import { useSettings, depositCopy } from "../lib/settings";
 import { business, checkoutNotice } from "../data/content";
 import "./CheckoutPage.css";
 
@@ -42,6 +42,9 @@ export default function CheckoutPage() {
   const subtotal = useCart(selectSubtotalCents);
 
   const depositPct = useSettings()?.depositPct; // live Admin → Settings value; undefined until loaded
+  // A deposit % of 0 turns deposits off: the option next to "pay in full" becomes
+  // "reserve now, pay on delivery" (nothing charged online) instead of a deposit.
+  const payLaterMode = depositPct === 0 ? "RESERVE" : "DEPOSIT";
   const [selectedDate, setSelectedDate] = useState(null);
   const [availStatus, setAvailStatus] = useState("idle");
   const [avail, setAvail] = useState(null);
@@ -147,9 +150,11 @@ export default function CheckoutPage() {
   const deliveryFeeCents = deliverable ? quote.feeCents : 0;
   const discountCents = discount?.discountCents ?? 0;
   const totalCents = Math.max(0, subtotal + deliveryFeeCents - discountCents);
-  const depositCents = depositPct == null ? null : Math.round((totalCents * depositPct) / 100);
-  const payNowCents = paymentMode === "DEPOSIT" ? depositCents : totalCents;
+  const depositCents = depositPct == null ? null : Math.round((totalCents * depositPct) / 100); // $0 when off
+  const payNowCents = paymentMode === "FULL" ? totalCents : depositCents;
   const balanceCents = totalCents - payNowCents;
+  const payLaterTitle =
+    depositPct == null ? "…" : payLaterMode === "RESERVE" ? "Reserve now, pay on delivery" : `Pay ${depositPct}% deposit now`;
 
   const applyDiscount = async () => {
     const code = discountInput.trim();
@@ -222,7 +227,7 @@ export default function CheckoutPage() {
         paymentMode,
         discountCode: discountStatus === "applied" ? discount?.code : undefined,
       });
-      window.location.href = url; // redirect to Stripe Checkout
+      window.location.href = url; // Stripe Checkout, or straight to the success page for a reservation
     } catch (err) {
       if (err.status === 409 && !err.shortfalls?.length && discountStatus === "applied") {
         // Someone else claimed the code between preview and submit — drop it
@@ -278,7 +283,7 @@ export default function CheckoutPage() {
           {checkoutNotice.intro && <p className="checkout-notice__intro">{checkoutNotice.intro}</p>}
           <ul className="checkout-notice__list">
             {checkoutNotice.points.map((point, i) => (
-              <li key={i}>{withDepositPct(point, depositPct)}</li>
+              <li key={i}>{depositCopy(point, depositPct)}</li>
             ))}
           </ul>
         </section>
@@ -457,16 +462,16 @@ export default function CheckoutPage() {
                   <span className="checkout-payopt__title">Pay in full now</span>
                   <span className="checkout-payopt__amount">{formatCents(totalCents)}</span>
                 </label>
-                <label className={`checkout-payopt ${paymentMode === "DEPOSIT" ? "is-selected" : ""}`}>
+                <label className={`checkout-payopt ${paymentMode === payLaterMode ? "is-selected" : ""}`}>
                   <input
                     type="radio"
                     name="paymentMode"
-                    value="DEPOSIT"
-                    checked={paymentMode === "DEPOSIT"}
-                    onChange={() => setPaymentMode("DEPOSIT")}
+                    value={payLaterMode}
+                    checked={paymentMode === payLaterMode}
+                    onChange={() => setPaymentMode(payLaterMode)}
                     disabled={depositPct == null}
                   />
-                  <span className="checkout-payopt__title">Pay {depositPct ?? "…"}% deposit now</span>
+                  <span className="checkout-payopt__title">{payLaterTitle}</span>
                   <span className="checkout-payopt__amount">
                     {depositCents == null ? "…" : formatCents(depositCents)}
                   </span>
@@ -587,7 +592,9 @@ export default function CheckoutPage() {
               className="checkout-summary__cta"
               disabled={!canContinue}
             >
-              {submitting ? "Redirecting…" : "Continue to payment"}
+              {paymentMode === "RESERVE"
+                ? submitting ? "Reserving…" : "Reserve my date"
+                : submitting ? "Redirecting…" : "Continue to payment"}
             </Button>
             {!canContinue && !submitting && (
               <p className="checkout-summary__hint">

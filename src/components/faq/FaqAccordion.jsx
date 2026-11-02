@@ -1,7 +1,7 @@
 import { useState } from "react";
 import clsx from "clsx";
 import { faqs } from "../../data/faqs";
-import { useSettings, withDepositPct } from "../../lib/settings";
+import { useSettings, depositCopy } from "../../lib/settings";
 import "./FaqAccordion.css";
 
 export default function FaqAccordion() {
@@ -49,7 +49,7 @@ export default function FaqAccordion() {
                 className="faq__a"
                 hidden={!isOpen}
               >
-                <p>{withDepositPct(f.answer, depositPct)}</p>
+                <p>{depositCopy(f.answer, depositPct)}</p>
               </div>
             </div>
           );

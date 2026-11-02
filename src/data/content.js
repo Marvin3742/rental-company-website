@@ -145,6 +145,8 @@ export const footer = {
 // Categories control tab order. Each FAQ needs a matching category string.
 // Write {depositPct} wherever an answer mentions the deposit percentage — it's
 // filled in from Admin → Settings, so the copy always matches what checkout charges.
+// An answer that depends on whether deposits are on is written as
+// { deposit: "...", noDeposit: "..." }; noDeposit shows while the deposit % is 0.
 
 export const faqCategories = [
   "Booking",
@@ -159,12 +161,18 @@ export const faqs = [
     {
     category: "Payment",
     question:  "Is a deposit required?",
-    answer:    "Yes. We require {depositPct}% of your order to be paid upfront to secure your date.",
+    answer: {
+      deposit:   "Yes. We require {depositPct}% of your order to be paid upfront to secure your date.",
+      noDeposit: "No. You can reserve your date online with nothing paid upfront and pay on delivery, or pay in full when you book.",
+    },
   },
   {
     category: "Cancellation & Weather",
     question:  "What's your cancellation policy?",
-    answer:    "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations incur a {depositPct}% cancellation fee (the deposit).",
+    answer: {
+      deposit:   "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations incur a {depositPct}% cancellation fee (the deposit).",
+      noDeposit: "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations of prepaid orders incur a 15% cancellation fee. If you reserved without paying, please let us know as soon as possible if your plans change.",
+    },
   },
   {
     category: "Delivery & Setup",
@@ -206,7 +214,8 @@ export const faqs = [
 // ─── Checkout: "Read this before booking" reminder ────────────────────────────
 // Shown as a highlighted callout at the top of the checkout page. Edit the
 // title/intro and the bullet points below — they render in order. As in the
-// FAQs, {depositPct} is filled in with the live deposit % from Admin → Settings.
+// FAQs, {depositPct} is filled in with the live deposit % from Admin → Settings,
+// and a point written as { deposit, noDeposit } switches with deposits on/off.
 
 export const checkoutNotice = {
   title: "Read this before booking",
@@ -215,7 +224,10 @@ export const checkoutNotice = {
     "Make sure you have enough clear, level space for everything you're renting. If you're unsure about sizes, measure your space or call us before booking.",
     "Water slides & inflatables: we provide a 150 ft hose and extension cord. A water source and a power outlet must be within 150 ft of where the unit will be set up.",
     "Please add anything important to the Delivery notes field below — especially the surface the rental will sit on (grass, concrete, turf, pavers, or dirt) and anything that affects access, like gates, stairs, slopes, or narrow walkways.",
-    "Deposit & cancellation: a {depositPct}% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the {depositPct}% deposit.",
+    {
+      deposit:   "Deposit & cancellation: a {depositPct}% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the {depositPct}% deposit.",
+      noDeposit: "Payment & cancellation: no deposit needed. Reserve now and pay on delivery, or pay in full today. Prepaid orders cancelled 3 or more days before your event get a full refund; last-minute cancellations of prepaid orders incur a 15% fee.",
+    },
   ],
 };
 

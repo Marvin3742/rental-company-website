@@ -339,7 +339,9 @@ function BookingCard({ booking: b, onUpdated }) {
         <div>
           <h4>Payment</h4>
           <div className="admin-booking__pay">
-            {b.paymentMode === "DEPOSIT" ? "Deposit" : "Full"} · total {formatCents(b.totalCents)}
+            {/* DEPOSIT with nothing paid = a no-deposit reservation (or an unpaid manual booking). */}
+            {b.paymentMode === "FULL" ? "Full" : b.amountPaidCents > 0 ? "Deposit" : "Pay on delivery"} · total{" "}
+            {formatCents(b.totalCents)}
             {/* Web bookings: totalCents excludes tax (tax is bolted on by the Stripe webhook).
                 Manual bookings: tax is folded into totalCents up front — don't double-count it. */}
             {b.source === "WEB" && b.taxCents ? ` (+${formatCents(b.taxCents)} tax)` : ""}

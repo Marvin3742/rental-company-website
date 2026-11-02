@@ -54,7 +54,10 @@ export default function SettingsPanel() {
         <label>
           <span>Deposit percentage (%)</span>
           <input type="number" min="0" max="100" value={form.depositPct} onChange={set("depositPct")} />
-          <small>Used when a customer chooses "pay deposit now".</small>
+          <small>
+            Customers can pay this much upfront instead of the full amount. Set to 0 to turn deposits off:
+            checkout then offers "pay in full" or "reserve now, pay on delivery" (nothing paid online).
+          </small>
         </label>
         <label>
           <span>Turnaround buffer (days)</span>
