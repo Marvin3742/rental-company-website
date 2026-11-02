@@ -8,7 +8,8 @@ import Button from "../components/ui/Button";
 import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
-import { startCheckout, fetchSettings, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
+import { startCheckout, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
+import { useSettings, withDepositPct } from "../lib/settings";
 import { business, checkoutNotice } from "../data/content";
 import "./CheckoutPage.css";
 
@@ -40,7 +41,7 @@ export default function CheckoutPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart(selectSubtotalCents);
 
-  const [settings, setSettings] = useState({ depositPct: 30, deliveryFeeCents: 0 });
+  const depositPct = useSettings()?.depositPct; // live Admin → Settings value; undefined until loaded
   const [selectedDate, setSelectedDate] = useState(null);
   const [availStatus, setAvailStatus] = useState("idle");
   const [avail, setAvail] = useState(null);
@@ -75,19 +76,6 @@ export default function CheckoutPage() {
     setForm((f) => ({ ...f, zip: e.target.value.replace(/\D/g, "").slice(0, 5) }));
   const updateState = (e) =>
     setForm((f) => ({ ...f, state: e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 2) }));
-
-  // Load deposit % for display (one-time fetch).
-  useEffect(() => {
-    let cancelled = false;
-    fetchSettings()
-      .then((s) => {
-        if (!cancelled) setSettings(s);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // Quote the delivery fee once the address is complete (debounced).
   useEffect(() => {
@@ -159,7 +147,7 @@ export default function CheckoutPage() {
   const deliveryFeeCents = deliverable ? quote.feeCents : 0;
   const discountCents = discount?.discountCents ?? 0;
   const totalCents = Math.max(0, subtotal + deliveryFeeCents - discountCents);
-  const depositCents = Math.round((totalCents * (settings.depositPct ?? 30)) / 100);
+  const depositCents = depositPct == null ? null : Math.round((totalCents * depositPct) / 100);
   const payNowCents = paymentMode === "DEPOSIT" ? depositCents : totalCents;
   const balanceCents = totalCents - payNowCents;
 
@@ -290,7 +278,7 @@ export default function CheckoutPage() {
           {checkoutNotice.intro && <p className="checkout-notice__intro">{checkoutNotice.intro}</p>}
           <ul className="checkout-notice__list">
             {checkoutNotice.points.map((point, i) => (
-              <li key={i}>{point}</li>
+              <li key={i}>{withDepositPct(point, depositPct)}</li>
             ))}
           </ul>
         </section>
@@ -476,11 +464,14 @@ export default function CheckoutPage() {
                     value="DEPOSIT"
                     checked={paymentMode === "DEPOSIT"}
                     onChange={() => setPaymentMode("DEPOSIT")}
+                    disabled={depositPct == null}
                   />
-                  <span className="checkout-payopt__title">Pay {settings.depositPct}% deposit now</span>
-                  <span className="checkout-payopt__amount">{formatCents(depositCents)}</span>
+                  <span className="checkout-payopt__title">Pay {depositPct ?? "…"}% deposit now</span>
+                  <span className="checkout-payopt__amount">
+                    {depositCents == null ? "…" : formatCents(depositCents)}
+                  </span>
                   <span className="checkout-payopt__sub">
-                    {formatCents(totalCents - depositCents)} balance collected on delivery
+                    {depositCents == null ? "…" : formatCents(totalCents - depositCents)} balance collected on delivery
                   </span>
                 </label>
               </div>

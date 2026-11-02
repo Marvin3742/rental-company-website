@@ -143,6 +143,8 @@ export const footer = {
 
 // ─── FAQs ─────────────────────────────────────────────────────────────────────
 // Categories control tab order. Each FAQ needs a matching category string.
+// Write {depositPct} wherever an answer mentions the deposit percentage — it's
+// filled in from Admin → Settings, so the copy always matches what checkout charges.
 
 export const faqCategories = [
   "Booking",
@@ -157,12 +159,12 @@ export const faqs = [
     {
     category: "Payment",
     question:  "Is a deposit required?",
-    answer:    "Yes. We require 15% of your order to be paid upfront to secure your date.",
+    answer:    "Yes. We require {depositPct}% of your order to be paid upfront to secure your date.",
   },
   {
     category: "Cancellation & Weather",
     question:  "What's your cancellation policy?",
-    answer:    "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations incur a 15% cancellation fee (the deposit).",
+    answer:    "Bookings must be cancelled at least 3 days in advance to receive a full refund. Last-minute cancellations incur a {depositPct}% cancellation fee (the deposit).",
   },
   {
     category: "Delivery & Setup",
@@ -203,7 +205,8 @@ export const faqs = [
 
 // ─── Checkout: "Read this before booking" reminder ────────────────────────────
 // Shown as a highlighted callout at the top of the checkout page. Edit the
-// title/intro and the bullet points below — they render in order.
+// title/intro and the bullet points below — they render in order. As in the
+// FAQs, {depositPct} is filled in with the live deposit % from Admin → Settings.
 
 export const checkoutNotice = {
   title: "Read this before booking",
@@ -212,7 +215,7 @@ export const checkoutNotice = {
     "Make sure you have enough clear, level space for everything you're renting. If you're unsure about sizes, measure your space or call us before booking.",
     "Water slides & inflatables: we provide a 150 ft hose and extension cord. A water source and a power outlet must be within 150 ft of where the unit will be set up.",
     "Please add anything important to the Delivery notes field below — especially the surface the rental will sit on (grass, concrete, turf, pavers, or dirt) and anything that affects access, like gates, stairs, slopes, or narrow walkways.",
-    "Deposit & cancellation: a 15% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the 15% deposit.",
+    "Deposit & cancellation: a {depositPct}% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the {depositPct}% deposit.",
   ],
 };
 

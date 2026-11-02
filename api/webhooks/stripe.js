@@ -96,6 +96,18 @@ async function confirmBooking(session) {
       where: { bookingId },
       data: { status: "CONFIRMED", expiresAt: null },
     }),
+    // Normally a no-op: the hold's claim already marked its discount code used.
+    // But an EXPIRED booking paid late had its code released by the expiry, so
+    // take the code back — unless someone has claimed it since (a new claim
+    // marks it used and unlinks this booking).
+    ...(booking.discountCodeId
+      ? [
+          prisma.discountCode.updateMany({
+            where: { usedAt: null, booking: { is: { id: bookingId } } },
+            data: { usedAt: new Date() },
+          }),
+        ]
+      : []),
   ]);
 
   // Best-effort emails — never fail the webhook if email has an issue.

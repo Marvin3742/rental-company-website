@@ -1,10 +1,12 @@
 import { useState } from "react";
 import clsx from "clsx";
 import { faqs } from "../../data/faqs";
+import { useSettings, withDepositPct } from "../../lib/settings";
 import "./FaqAccordion.css";
 
 export default function FaqAccordion() {
   const [openIndexes, setOpenIndexes] = useState(() => new Set());
+  const depositPct = useSettings()?.depositPct;
 
   function toggle(index) {
     setOpenIndexes((prev) => {
@@ -47,7 +49,7 @@ export default function FaqAccordion() {
                 className="faq__a"
                 hidden={!isOpen}
               >
-                <p>{f.answer}</p>
+                <p>{withDepositPct(f.answer, depositPct)}</p>
               </div>
             </div>
           );
