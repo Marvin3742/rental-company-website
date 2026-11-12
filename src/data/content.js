@@ -19,7 +19,7 @@ export const features = {
 export const business = {
   name: "Solimar Event Rentals",
   tagline: "Family-owned event rentals in the Naples, FL area",
-  phone: "239-778-3742",
+  phone: "305-735-1242",
   email: "SolimarEventRentals88@gmail.com",
   Facebook: "https://www.facebook.com/profile.php?id=61590500376097",
   serviceAreas: ["Naples", "Bonita Springs", "Marco Island"],
@@ -204,7 +204,7 @@ export const faqs = [
   {
     category: "Booking",
     question:  "How do I book a rental?",
-    answer:    "You can call or text us at 239-778-3742 to book — text is preferred. You can also book online.",
+    answer:    "You can call or text us at 305-735-1242 to book — text is preferred. You can also book online.",
   },
 
 
