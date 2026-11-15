@@ -28,6 +28,7 @@ const blankForm = () => ({
   address: "",
   deliveryFee: "0",
   lines: [{ ...BLANK_LINE }],
+  discount: "0",
   tax: "0",
   amountPaid: "0",
   paymentMethod: "cash",
@@ -88,8 +89,11 @@ export default function ManualBookingForm({ onCreated }) {
     0
   );
   const feeCents = form.pickup ? 0 : dollarsToCents(form.deliveryFee);
+  // Off the whole order before tax; items keep their regular prices so the
+  // receipt shows the regular total and then the discount.
+  const discountCents = dollarsToCents(form.discount);
   const taxCents = dollarsToCents(form.tax);
-  const totalCents = subtotalCents + feeCents + taxCents;
+  const totalCents = subtotalCents + feeCents - discountCents + taxCents;
   const paidCents = dollarsToCents(form.amountPaid);
   const balanceDueCents = Math.max(0, totalCents - paidCents);
 
@@ -105,6 +109,7 @@ export default function ManualBookingForm({ onCreated }) {
         quantity: parseInt(l.quantity, 10),
         unitPriceCents: dollarsToCents(l.priceDollars),
       })),
+    discountCents,
     taxCents,
     amountPaidCents: paidCents,
     paymentMethod: form.paymentMethod,
@@ -245,6 +250,17 @@ export default function ManualBookingForm({ onCreated }) {
 
       <div className="admin-additem__grid">
         <label>
+          Discount ($)
+          <input
+            type="number"
+            min="0"
+            max={((subtotalCents + feeCents) / 100).toFixed(2)}
+            step="0.01"
+            value={form.discount}
+            onChange={setField("discount")}
+          />
+        </label>
+        <label>
           Tax ($)
           <input type="number" min="0" step="0.01" value={form.tax} onChange={setField("tax")} />
         </label>
@@ -282,12 +298,19 @@ export default function ManualBookingForm({ onCreated }) {
       </label>
 
       <p className="admin-manual__summary">
-        Subtotal {formatCents(subtotalCents)} · Delivery {formatCents(feeCents)} · Tax {formatCents(taxCents)} ·{" "}
+        Subtotal {formatCents(subtotalCents)} · Delivery {formatCents(feeCents)}
+        {discountCents > 0 && ` · Discount −${formatCents(discountCents)}`} · Tax {formatCents(taxCents)} ·{" "}
         <strong>Total {formatCents(totalCents)}</strong> · Paid {formatCents(paidCents)}
         {balanceDueCents > 0
           ? ` · Balance due ${formatCents(balanceDueCents)}`
           : " · Paid in full"}
       </p>
+      {discountCents > 0 && (
+        <p className="admin-muted">
+          The customer’s receipt lists the items at the prices above, then this discount. Leave item prices at
+          their regular price so the deal shows.
+        </p>
+      )}
 
       {err && <p className="admin-error">{err}</p>}
 
