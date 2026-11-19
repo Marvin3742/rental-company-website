@@ -5,6 +5,11 @@ import { getSettings } from "../lib/server/availability.js";
 export default withApi({
   async GET() {
     const s = await getSettings();
-    return { depositPct: s.depositPct, deliveryFeeCents: s.deliveryFeeCents };
+    return {
+      depositPct: s.depositPct,
+      deliveryFeeCents: s.deliveryFeeCents,
+      smallOrderThresholdCents: s.smallOrderThresholdCents,
+      smallOrderFeeCents: s.smallOrderFeeCents,
+    };
   },
 });

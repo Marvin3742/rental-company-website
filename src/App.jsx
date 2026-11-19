@@ -9,6 +9,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import BookingSuccessPage from "./pages/BookingSuccessPage";
 import BookingCancelledPage from "./pages/BookingCancelledPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import AdminApp from "./pages/admin/AdminApp";
 import UnderConstructionPage from "./pages/UnderConstructionPage";
 import { features } from "./data/content";
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/booking/success" element={<BookingSuccessPage />} />
             <Route path="/booking/cancelled" element={<BookingCancelledPage />} />
             <Route path="/about" element={<AboutFaqPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/gallery" element={features.showGallery ? <GalleryPage /> : <Navigate to="/" replace />} />
             <Route path="*" element={<HomePage />} />
           </Route>

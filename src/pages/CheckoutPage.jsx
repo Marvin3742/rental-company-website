@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
@@ -10,7 +10,10 @@ import { useCart, selectSubtotalCents } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { checkCartAvailability, toISODate, formatDateLong } from "../lib/availability";
 import { startCheckout, fetchDeliveryQuote, fetchDiscountQuote } from "../lib/checkout";
-import { useSettings, depositCopy } from "../lib/settings";
+import { useSettings } from "../lib/settings";
+import { settingsCopy } from "../lib/settingsCopy";
+import { computeSmallOrderFee } from "../lib/smallOrderFee";
+import { trackBeginCheckout, getClickId, rememberCustomerForConversion } from "../lib/analytics";
 import { business, checkoutNotice } from "../data/content";
 import "./CheckoutPage.css";
 
@@ -42,7 +45,8 @@ export default function CheckoutPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart(selectSubtotalCents);
 
-  const depositPct = useSettings()?.depositPct; // live Admin → Settings value; undefined until loaded
+  const settings = useSettings(); // live Admin → Settings values; null until loaded
+  const depositPct = settings?.depositPct;
   // A deposit % of 0 turns deposits off: the option next to "pay in full" becomes
   // "reserve now, pay on delivery" (nothing charged online) instead of a deposit.
   const payLaterMode = depositPct === 0 ? "RESERVE" : "DEPOSIT";
@@ -81,6 +85,14 @@ export default function CheckoutPage() {
     setForm((f) => ({ ...f, zip: e.target.value.replace(/\D/g, "").slice(0, 5) }));
   const updateState = (e) =>
     setForm((f) => ({ ...f, state: e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 2) }));
+
+  // GA4 funnel: once per visit to checkout with something in the cart.
+  const beganCheckout = useRef(false);
+  useEffect(() => {
+    if (beganCheckout.current || items.length === 0) return;
+    beganCheckout.current = true;
+    trackBeginCheckout(items, subtotal);
+  }, [items, subtotal]);
 
   // Quote the delivery fee once the address is complete (debounced).
   useEffect(() => {
@@ -151,7 +163,9 @@ export default function CheckoutPage() {
   const deliverable = quoteStatus === "loaded" && quote?.serviceable;
   const deliveryFeeCents = deliverable ? quote.feeCents : 0;
   const discountCents = discount?.discountCents ?? 0;
-  const totalCents = Math.max(0, subtotal + deliveryFeeCents - discountCents);
+  // Display only — the server recomputes both from DB prices at checkout.
+  const smallOrderFeeCents = computeSmallOrderFee(subtotal, settings);
+  const totalCents = Math.max(0, subtotal + deliveryFeeCents + smallOrderFeeCents - discountCents);
   const depositCents = depositPct == null ? null : Math.round((totalCents * depositPct) / 100); // $0 when off
   const payNowCents = paymentMode === "FULL" ? totalCents : depositCents;
   const balanceCents = totalCents - payNowCents;
@@ -235,7 +249,9 @@ export default function CheckoutPage() {
         },
         paymentMode,
         discountCode: discountStatus === "applied" ? discount?.code : undefined,
+        clickId: getClickId(),
       });
+      rememberCustomerForConversion({ email: form.email, phone: form.phone });
       window.location.href = url; // Stripe Checkout, or straight to the success page for a reservation
     } catch (err) {
       setConfirmingReserve(false); // the error shows on the page, under the summary
@@ -294,7 +310,7 @@ export default function CheckoutPage() {
           {checkoutNotice.intro && <p className="checkout-notice__intro">{checkoutNotice.intro}</p>}
           <ul className="checkout-notice__list">
             {checkoutNotice.points.map((point, i) => (
-              <li key={i}>{depositCopy(point, depositPct)}</li>
+              <li key={i}>{settingsCopy(point, settings)}</li>
             ))}
           </ul>
         </section>
@@ -524,12 +540,18 @@ export default function CheckoutPage() {
                   {quoteStatus === "error" && <span className="checkout-avail--bad">check address</span>}
                   {quoteStatus === "loaded" &&
                     (quote?.serviceable ? (
-                      deliveryFeeCents === 0 ? "FREE" : formatCents(deliveryFeeCents)
+                      deliveryFeeCents === 0 ? "Free" : formatCents(deliveryFeeCents)
                     ) : (
                       <span className="checkout-avail--bad">call us</span>
                     ))}
                 </span>
               </div>
+              {smallOrderFeeCents > 0 && (
+                <div className="checkout-summary__line">
+                  <span>Small order fee</span>
+                  <span>{formatCents(smallOrderFeeCents)}</span>
+                </div>
+              )}
               <div className="checkout-summary__line checkout-summary__line--muted">
                 <span>Tax</span>
                 <span>Calculated at payment</span>
@@ -607,6 +629,9 @@ export default function CheckoutPage() {
                 ? submitting ? "Reserving…" : "Reserve my date"
                 : submitting ? "Redirecting…" : "Continue to payment"}
             </Button>
+            <p className="checkout-summary__legal">
+              By booking you agree to our <Link to="/privacy">Privacy Policy</Link>.
+            </p>
             {!canContinue && !submitting && (
               <p className="checkout-summary__hint">
                 Pick an available date and fill in your details to continue.

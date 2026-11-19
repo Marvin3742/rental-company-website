@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Container from "../ui/Container";
 import { business, footer as footerContent } from "../../data/content";
 import { telHref, formatPhone, mailtoHref } from "../../lib/format";
@@ -19,7 +20,7 @@ export default function Footer() {
             <h3 className="site-footer__heading">{footerContent.contactHeading}</h3>
             <ul className="site-footer__list">
               <li>
-                <a href={telHref(business.phone)}>
+                <a href={telHref(business.phone)} data-track-location="footer">
                   <span aria-hidden="true"></span> {formatPhone(business.phone)}
                 </a>
               </li>
@@ -48,10 +49,14 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__bottom">
-          <p>© {year} {business.name}. Family-owned in {business.city}.</p>
+          <p>
+            © {year} {business.name}. Family-owned in {business.city}. <Link to="/privacy">Privacy Policy</Link>
+          </p>
           <p>
             {footerContent.bottomCta} —{" "}
-            <a href={telHref(business.phone)}>{formatPhone(business.phone)}</a>
+            <a href={telHref(business.phone)} data-track-location="footer">
+              {formatPhone(business.phone)}
+            </a>
           </p>
         </div>
       </Container>

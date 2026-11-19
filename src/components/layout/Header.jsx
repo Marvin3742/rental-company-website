@@ -52,7 +52,7 @@ export default function Header() {
           </ul>
         </nav>
 
-        <a className="site-header__phone" href={telHref(business.phone)}>
+        <a className="site-header__phone" href={telHref(business.phone)} data-track-location="header">
           <span>{formatPhone(business.phone)}</span>
         </a>
 

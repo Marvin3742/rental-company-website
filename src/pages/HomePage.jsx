@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <>
       <SeoHead
-        description="Family-owned party rentals serving Naples, Bonita Springs, and Marco Island. Tents, tables, chairs, and bounce houses with delivery and setup included."
+        description="Family-owned party rentals in Naples, Bonita Springs & Marco Island, FL. Tents, tables, chairs and water slides. Free delivery & setup in Naples."
         path="/"
       />
       <Hero />

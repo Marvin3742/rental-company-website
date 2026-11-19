@@ -1,12 +1,13 @@
 import { useState } from "react";
 import clsx from "clsx";
 import { faqs } from "../../data/faqs";
-import { useSettings, depositCopy } from "../../lib/settings";
+import { useSettings } from "../../lib/settings";
+import { settingsCopy } from "../../lib/settingsCopy";
 import "./FaqAccordion.css";
 
 export default function FaqAccordion() {
   const [openIndexes, setOpenIndexes] = useState(() => new Set());
-  const depositPct = useSettings()?.depositPct;
+  const settings = useSettings();
 
   function toggle(index) {
     setOpenIndexes((prev) => {
@@ -20,6 +21,9 @@ export default function FaqAccordion() {
     <div className="faq">
       <div className="faq__list">
         {faqs.map((f, index) => {
+          // Hidden while the fee is off (or settings haven't loaded); skipping it
+          // here keeps every other FAQ's index, and so its open state, stable.
+          if (f.onlyWithSmallOrderFee && !(settings?.smallOrderFeeCents > 0)) return null;
           const isOpen = openIndexes.has(index);
           const panelId = `faq-panel-${index}`;
           const buttonId = `faq-button-${index}`;
@@ -49,7 +53,7 @@ export default function FaqAccordion() {
                 className="faq__a"
                 hidden={!isOpen}
               >
-                <p>{depositCopy(f.answer, depositPct)}</p>
+                <p>{settingsCopy(f.answer, settings)}</p>
               </div>
             </div>
           );

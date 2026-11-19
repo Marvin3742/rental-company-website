@@ -3,7 +3,9 @@ import SeoHead from "../lib/seo";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
 import { useCart, selectSubtotalCents } from "../store/cart";
-import { formatCents } from "../lib/format";
+import { formatCents, formatCentsShort } from "../lib/format";
+import { useSettings } from "../lib/settings";
+import { computeSmallOrderFee } from "../lib/smallOrderFee";
 import "./CartPage.css";
 
 export default function CartPage() {
@@ -11,6 +13,8 @@ export default function CartPage() {
   const setQuantity = useCart((s) => s.setQuantity);
   const removeItem = useCart((s) => s.removeItem);
   const subtotal = useCart(selectSubtotalCents);
+  const settings = useSettings();
+  const smallOrderFeeCents = computeSmallOrderFee(subtotal, settings);
   const navigate = useNavigate();
 
   return (
@@ -84,6 +88,12 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span className="cart-summary__amount">{formatCents(subtotal)}</span>
               </div>
+              {smallOrderFeeCents > 0 && (
+                <p className="cart-summary__fee-note">
+                  Add {formatCentsShort(settings.smallOrderThresholdCents - subtotal)} more to skip the{" "}
+                  {formatCentsShort(smallOrderFeeCents)} small-order fee.
+                </p>
+              )}
               <p className="cart-summary__note">
                 Pick your event date and confirm availability at checkout. Taxes and any delivery
                 fee are added there.

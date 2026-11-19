@@ -15,7 +15,7 @@ export default defineConfig({
     devApiPlugin(),
     sitemap({
       hostname,
-      dynamicRoutes: ["/", "/rentals", "/about", "/gallery"],
+      dynamicRoutes: ["/", "/rentals", "/about", "/gallery", "/privacy"],
     }),
   ],
 });

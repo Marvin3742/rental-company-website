@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { getAdminSettings, patchSettings } from "../../lib/admin";
 
+// The small-order fee settings are stored in cents but edited in dollars.
+const toForm = (s) => ({
+  ...s,
+  smallOrderFee: (s.smallOrderFeeCents / 100).toFixed(2),
+  smallOrderThreshold: (s.smallOrderThresholdCents / 100).toFixed(2),
+});
+const dollarsToCents = (v) => Math.round((parseFloat(v) || 0) * 100);
+
 export default function SettingsPanel() {
   const [form, setForm] = useState(null);
   const [error, setError] = useState(null);
@@ -9,7 +17,7 @@ export default function SettingsPanel() {
 
   useEffect(() => {
     getAdminSettings()
-      .then((s) => setForm(s))
+      .then((s) => setForm(toForm(s)))
       .catch((e) => setError(e.message));
   }, []);
 
@@ -31,8 +39,10 @@ export default function SettingsPanel() {
         maxBookingsPerDay: parseInt(form.maxBookingsPerDay, 10),
         depositPct: parseInt(form.depositPct, 10),
         bufferDays: parseInt(form.bufferDays, 10),
+        smallOrderFeeCents: dollarsToCents(form.smallOrderFee),
+        smallOrderThresholdCents: dollarsToCents(form.smallOrderThreshold),
       });
-      setForm(updated);
+      setForm(toForm(updated));
       setSaved(true);
     } catch (e2) {
       setError(e2.message);
@@ -58,6 +68,25 @@ export default function SettingsPanel() {
             Customers can pay this much upfront instead of the full amount. Set to 0 to turn deposits off:
             checkout then offers "pay in full" or "reserve now, pay on delivery" (nothing paid online).
           </small>
+        </label>
+        <label>
+          <span>Small-order fee ($)</span>
+          <input type="number" min="0" step="0.01" value={form.smallOrderFee} onChange={set("smallOrderFee")} />
+          <small>
+            Added to online orders whose rentals subtotal is under the amount below, on top of any delivery fee.
+            Set to 0 to turn it off.
+          </small>
+        </label>
+        <label>
+          <span>Small-order fee applies under ($)</span>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.smallOrderThreshold}
+            onChange={set("smallOrderThreshold")}
+          />
+          <small>Rentals subtotal (before delivery and discounts) below which the fee applies.</small>
         </label>
         <label>
           <span>Turnaround buffer (days)</span>

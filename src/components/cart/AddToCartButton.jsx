@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Button from "../ui/Button";
 import { useCart } from "../../store/cart";
 import { useToasts } from "../../store/toast";
+import { trackAddToCart } from "../../lib/analytics";
 
 const CartIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -39,6 +40,7 @@ export default function AddToCartButton({
 
   const onClick = () => {
     addItem(entry, quantity);
+    trackAddToCart(entry, quantity);
     addToast({
       kind: entry.kind,
       slug: entry.slug,

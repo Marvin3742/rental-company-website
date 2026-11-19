@@ -1,5 +1,6 @@
 // POST /api/checkout
-// Body: { eventDate, lines:[{kind,slug,quantity}], customer:{...}, paymentMode:"FULL"|"DEPOSIT"|"RESERVE" }
+// Body: { eventDate, lines:[{kind,slug,quantity}], customer:{...}, paymentMode:"FULL"|"DEPOSIT"|"RESERVE",
+//         discountCode?, clickId?:{type:"gclid"|"gbraid"|"wbraid",value} }
 // Creates an oversell-safe hold, then a Stripe Checkout Session. Returns { url, bookingId }.
 // RESERVE (offered while deposits are off) skips Stripe: the booking is confirmed
 // on the spot and `url` points straight at the success page.
@@ -14,7 +15,14 @@ import { sendBookingEmails } from "../lib/server/email.js";
 const SITE_URL = process.env.VITE_SITE_URL || "http://localhost:5173";
 const TAX_ENABLED = process.env.STRIPE_TAX_ENABLED === "true";
 
+const lineItem = (name, cents) => ({
+  price_data: { currency: "usd", product_data: { name }, unit_amount: cents },
+  quantity: 1,
+});
+
 function buildLineItems(hold) {
+  // The deposit is a share of the whole total (small-order fee included), so it
+  // stays one line.
   if (hold.paymentMode === "DEPOSIT") {
     return [
       {
@@ -30,18 +38,14 @@ function buildLineItems(hold) {
   // A discount is already folded into hold.totalCents by createBookingHold, so
   // the itemized per-product prices below no longer sum to the actual charge.
   // Rather than pull in Stripe's own Coupon API to reconcile that, just charge
-  // a single lump sum — our own confirmation email still itemizes in full.
+  // a single lump sum — our own confirmation email still itemizes in full. The
+  // small-order fee isn't discountable, so it keeps its own line.
   if (hold.discountCents > 0) {
-    return [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: { name: "Solimar Event Rentals — order total (discount applied)" },
-          unit_amount: hold.chargeNowCents,
-        },
-        quantity: 1,
-      },
+    const items = [
+      lineItem("Solimar Event Rentals — order total (discount applied)", hold.chargeNowCents - hold.smallOrderFeeCents),
     ];
+    if (hold.smallOrderFeeCents > 0) items.push(lineItem("Small order fee", hold.smallOrderFeeCents));
+    return items;
   }
   const items = hold.displayLines.map((dl) => ({
     price_data: {
@@ -51,16 +55,8 @@ function buildLineItems(hold) {
     },
     quantity: dl.quantity,
   }));
-  if (hold.deliveryFeeCents > 0) {
-    items.push({
-      price_data: {
-        currency: "usd",
-        product_data: { name: "Delivery & setup" },
-        unit_amount: hold.deliveryFeeCents,
-      },
-      quantity: 1,
-    });
-  }
+  if (hold.deliveryFeeCents > 0) items.push(lineItem("Delivery & setup", hold.deliveryFeeCents));
+  if (hold.smallOrderFeeCents > 0) items.push(lineItem("Small order fee", hold.smallOrderFeeCents));
   return items;
 }
 
@@ -71,7 +67,7 @@ export default withApi({
     // the calendar with fake holds. 15/10min is far above any real customer.
     rateLimit(`checkout:${clientIp(req)}`, { max: 15, windowMs: 10 * 60 * 1000 });
 
-    const { eventDate, lines, customer, paymentMode, discountCode } = req.body ?? {};
+    const { eventDate, lines, customer, paymentMode, discountCode, clickId } = req.body ?? {};
     // A reservation keeps its inventory until the owner cancels it (nothing paid,
     // no expiry), so allow far fewer of those per IP than 32-minute holds.
     if (paymentMode === "RESERVE") rateLimit(`reserve:${clientIp(req)}`, { max: 5, windowMs: 60 * 60 * 1000 });
@@ -79,7 +75,7 @@ export default withApi({
 
     let hold;
     try {
-      hold = await createBookingHold({ eventDate: date, lines, customer, paymentMode, discountCode });
+      hold = await createBookingHold({ eventDate: date, lines, customer, paymentMode, discountCode, clickId });
     } catch (err) {
       if (err.shortfalls) {
         // Names only — don't leak available/stock counts to the client.

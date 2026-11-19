@@ -10,6 +10,11 @@ export function formatCents(cents) {
   })}`;
 }
 
+// For amounts inside sentences: "$25" for whole dollars, "$12.50" otherwise.
+export function formatCentsShort(cents) {
+  return cents % 100 === 0 ? `$${(cents / 100).toLocaleString("en-US")}` : formatCents(cents);
+}
+
 export function formatPhone(phone) {
   // Accepts "239-555-0100" or "2395550100" → "(239) 555-0100"
   const digits = phone.replace(/\D/g, "");

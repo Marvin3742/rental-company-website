@@ -7,6 +7,7 @@ import { fetchBooking } from "../lib/checkout";
 import { useCart } from "../store/cart";
 import { formatCents } from "../lib/format";
 import { formatDateLong } from "../lib/availability";
+import { trackBooking } from "../lib/analytics";
 import "./BookingResult.css";
 
 export default function BookingSuccessPage() {
@@ -30,6 +31,7 @@ export default function BookingSuccessPage() {
         if (b.status === "UPCOMING") {
           setState("confirmed");
           useCart.getState().clear();
+          trackBooking(b); // the conversion: confirmed bookings only, once per booking
           return;
         }
         if (b.status === "CANCELLED" || b.status === "EXPIRED") {

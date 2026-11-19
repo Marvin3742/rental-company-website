@@ -50,7 +50,9 @@ export default function AboutFaqPage() {
             <p>{faqSectionContent.followUpLine1}</p>
             <p>
               Call us at{" "}
-              <a href={telHref(business.phone)}>{formatPhone(business.phone)}</a>{" "}
+              <a href={telHref(business.phone)} data-track-location="about">
+                {formatPhone(business.phone)}
+              </a>{" "}
               {faqSectionContent.followUpLine2}
             </p>
           </div>

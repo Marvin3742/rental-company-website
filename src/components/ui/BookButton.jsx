@@ -19,6 +19,7 @@ export default function BookButton({
       size={size}
       className={className}
       aria-label={`Call ${formatPhone(business.phone)} to book your party`}
+      data-track-location="cta"
     >
       {text}
     </Button>

@@ -357,6 +357,7 @@ function BookingCard({ booking: b, onUpdated, onDeleted }) {
             {/* DEPOSIT with nothing paid = a no-deposit reservation (or an unpaid manual booking). */}
             {b.paymentMode === "FULL" ? "Full" : b.amountPaidCents > 0 ? "Deposit" : "Pay on delivery"} · total{" "}
             {formatCents(b.totalCents)}
+            {b.smallOrderFeeCents > 0 ? `, incl. ${formatCents(b.smallOrderFeeCents)} small-order fee` : ""}
             {b.discountCents > 0 ? ` after ${formatCents(b.discountCents)} off` : ""}
             {/* Web bookings: totalCents excludes tax (tax is bolted on by the Stripe webhook).
                 Manual bookings: tax is folded into totalCents up front — don't double-count it. */}
@@ -373,6 +374,11 @@ function BookingCard({ booking: b, onUpdated, onDeleted }) {
               <> · paid in full{b.balanceCollectedMethod ? ` (${b.balanceCollectedMethod})` : ""}</>
             )}
           </div>
+          {b.clickId && (
+            <div className="admin-booking__click admin-muted">
+              Came from a Google ad ({b.clickIdType}): <code>{b.clickId}</code>
+            </div>
+          )}
         </div>
       </div>
 

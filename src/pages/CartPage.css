@@ -154,6 +154,16 @@
   margin: 0;
 }
 
+/* Friendly nudge, not a warning: the small-order fee still lets them check out. */
+.cart-summary__fee-note {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-deep);
+  font-size: 0.875rem;
+}
+
 .cart-summary__checkout {
   width: 100%;
   justify-content: center;

@@ -161,6 +161,11 @@ model Booking {
   paymentMethod          String? // how the initial amountPaidCents was collected on a MANUAL booking; null for WEB (paid via Stripe)
   discountCodeId         String? @unique // one-time discount code redeemed on this booking, if any
   discountCents          Int     @default(0) // amount actually discounted (record; already folded into totalCents)
+  smallOrderFeeCents     Int     @default(0) // small-order fee charged (record; already folded into totalCents)
+
+  // Google Ads click that led to the booking (from the landing URL), kept for offline conversion uploads.
+  clickId     String?
+  clickIdType String? // "gclid" | "gbraid" | "wbraid"
 
   // Free-text note the owner can attach to a booking in the admin (internal only).
   adminNote String?
@@ -257,6 +262,8 @@ model Setting {
   depositPct        Int      @default(30) // deposit percentage of grand total
   bufferDays        Int      @default(1) // turnaround days added after event date
   deliveryFeeCents  Int      @default(0) // flat fee (0 = included within service area)
+  smallOrderThresholdCents Int @default(5000) // rentals subtotal below this pays the small-order fee
+  smallOrderFeeCents       Int @default(2500) // small-order fee (0 = off)
   serviceHours      String? // human-readable, for display
   updatedAt         DateTime @updatedAt
 }

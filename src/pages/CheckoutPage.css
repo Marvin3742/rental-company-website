@@ -409,6 +409,17 @@
   text-align: center;
 }
 
+.checkout-summary__legal {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin: 0;
+  text-align: center;
+}
+
+.checkout-summary__legal a {
+  color: var(--color-accent);
+}
+
 .checkout-summary__back {
   display: inline-flex;
   align-items: center;

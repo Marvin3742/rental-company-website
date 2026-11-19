@@ -605,6 +605,11 @@
   font-size: 0.85rem;
   margin-top: var(--space-2);
 }
+.admin-booking__click {
+  font-size: 0.75rem;
+  margin-top: var(--space-2);
+  overflow-wrap: anywhere; /* gclids are long and unbroken */
+}
 .admin-booking__note {
   display: flex;
   flex-direction: column;

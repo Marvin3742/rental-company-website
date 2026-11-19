@@ -45,7 +45,7 @@ export const nav = {
 export const hero = {
   titleLine1:   "Solimar Event",
   titleAccent:  "Rentals",
-  subtitle:     "Family-owned event rentals serving the Naples, FL area. Tents, tables, chairs, and inflatables — delivered and set up for you.",
+  subtitle:     "Family-owned event rentals serving the Naples, FL area. Tents, tables, chairs, and inflatables. Free delivery & setup in Naples.",
   primaryCta:   "Call us",
   secondaryCta: "View Rentals",
 };
@@ -55,7 +55,7 @@ export const hero = {
 
 export const featuredPackagesSection = {
   title:      "Event packages",
-  subtitle:   "Includes delivery and setup.",
+  subtitle:   "Free delivery & setup in Naples.",
   altLinkText: "Individual rentals",
 };
 
@@ -74,7 +74,7 @@ export const galleryPreviewSection = {
 export const rentalsPage = {
   seo: {
     title:       "Event Rentals & Packages | Naples, Bonita Springs, Marco Island",
-    description: "Browse our event rental packages and individual items. Tents, tables, chairs, and bounce houses with delivery and setup included.",
+    description: "Browse our event rental packages and individual items. Tents, tables, chairs, and bounce houses. Free delivery & setup in Naples.",
   },
   packagesSection: {
     title:    "PACKAGES",
@@ -87,7 +87,7 @@ export const rentalsPage = {
     title:   "INFLATABLES",
   },
   reminder: {
-    heading: "Packages include delivery and setup.",
+    heading: "Free delivery & setup in Naples.",
   },
 };
 
@@ -147,6 +147,8 @@ export const footer = {
 // filled in from Admin → Settings, so the copy always matches what checkout charges.
 // An answer that depends on whether deposits are on is written as
 // { deposit: "...", noDeposit: "..." }; noDeposit shows while the deposit % is 0.
+// Likewise {smallOrderFee} and {smallOrderThreshold} come from Admin → Settings,
+// and an FAQ marked onlyWithSmallOrderFee is hidden while that fee is set to 0.
 
 export const faqCategories = [
   "Booking",
@@ -177,7 +179,13 @@ export const faqs = [
   {
     category: "Delivery & Setup",
     question:  "Is delivery included?",
-    answer:    "We deliver throughout Collier and Lee County. The delivery fee is calculated based on your distance from us and can be as low as $0.00. ",
+    answer:    "Delivery and setup are free within Naples. Elsewhere in Collier and Lee County, the delivery fee depends on distance and is shown at checkout before you book.",
+  },
+  {
+    category: "Payment",
+    question:  "Is there a small-order fee?",
+    answer:    "Orders under {smallOrderThreshold} in rentals include a {smallOrderFee} small-order fee, in addition to any delivery fee.",
+    onlyWithSmallOrderFee: true,
   },
   {
     question: "What time do you guys drop-off/deliver?",
@@ -227,6 +235,56 @@ export const checkoutNotice = {
     {
       deposit:   "Deposit & cancellation: a {depositPct}% deposit secures your date. Cancel 3 or more days before your event for a full refund; last-minute cancellations keep the {depositPct}% deposit.",
       noDeposit: "Payment & cancellation: no deposit needed. Reserve now and pay on delivery, or pay in full today. Prepaid orders cancelled 3 or more days before your event get a full refund; last-minute cancellations of prepaid orders incur a 15% fee.",
+    },
+  ],
+};
+
+
+// ─── Privacy policy (/privacy) ────────────────────────────────────────────────
+// Plain-language template, not legal advice. Update lastUpdated ("YYYY-MM-DD")
+// whenever the policy changes. The contact line at the bottom of the page comes
+// from the business info above.
+
+export const privacyPolicy = {
+  lastUpdated: "2026-11-18",
+  intro:
+    "Solimar Event Rentals (\"we\", \"us\") is a family-owned party rental business in Naples, Florida. This policy explains what information we collect when you use solimareventrentals.com and how we use it.",
+  sections: [
+    {
+      heading: "Information you give us",
+      body: "When you book, we collect your name, email address, phone number, delivery address, event date, delivery and pickup preferences, and any notes you add. We use this to deliver, set up and pick up your rentals, to contact you about your booking, and to keep business records.",
+    },
+    {
+      heading: "Payments",
+      body: "Card payments are processed by Stripe. We do not see or store your full card number. If you reserve without paying online, you pay us directly on delivery.",
+    },
+    {
+      heading: "Service providers",
+      body: "A few service providers help us run the site and your booking: Vercel hosts the website, Neon stores booking records, Resend sends booking emails, and Stripe processes card payments. To work out the delivery fee, we look up your delivery address with the U.S. Census Bureau's address service.",
+    },
+    {
+      heading: "Analytics and advertising",
+      body: "We use Google Analytics to understand how visitors use our site, and Google Ads to measure whether our ads lead to bookings and calls. These services use cookies and similar technologies. When you complete a booking, we may share your email address and phone number with Google in hashed (encrypted, unreadable) form to measure ad performance. If you arrived from one of our Google ads, we save the ad click identifier with your booking.",
+    },
+    {
+      heading: "What we don't do",
+      body: "We do not sell your personal information. We share it only with the service providers above, as needed to run our business, or when required by law.",
+    },
+    {
+      heading: "Your choices",
+      body: "You can manage how Google uses ad data at adssettings.google.com and opt out of Google Analytics with Google's browser add-on (tools.google.com/dlpage/gaoptout). You can also block or delete cookies in your browser. To ask us to see, correct or delete your information, contact us using the details below.",
+    },
+    {
+      heading: "Data retention",
+      body: "We keep booking records as long as we need them for business, tax and legal purposes.",
+    },
+    {
+      heading: "Children",
+      body: "Our site is not directed at children under 13, and we do not knowingly collect their information.",
+    },
+    {
+      heading: "Changes",
+      body: "If we update this policy, we will post the new version on this page with a new date.",
     },
   ],
 };
