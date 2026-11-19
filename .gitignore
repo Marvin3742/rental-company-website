@@ -29,3 +29,6 @@ dist-ssr
 *.sw?
 .vercel
 .env*
+!.env.example
+# Public, build-time VITE_ values for production builds only (Google Ads IDs) — never secrets.
+!.env.production
